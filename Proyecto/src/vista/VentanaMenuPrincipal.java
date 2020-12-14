@@ -36,7 +36,6 @@ public class VentanaMenuPrincipal extends  JFrame{
 			}
 		});
 	}
-	
 	public VentanaMenuPrincipal(String[] args) {
 		//Cambia la apariencia de las ventanas
 		try {
