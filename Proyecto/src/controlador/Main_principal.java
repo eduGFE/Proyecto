@@ -1,5 +1,5 @@
 package controlador;
-
+//Prueba Miguel Linea 2 (Main_Principal)
 import vista.VentanaMenuPrincipal;
 
 public class Main_principal {
