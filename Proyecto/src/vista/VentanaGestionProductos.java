@@ -9,13 +9,13 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import controlador.coordinador_clientes;
-import controlador.coordinador_productos;
+import controlador.Coordinador_Clientes;
+import controlador.Coordinador_Productos;
 
 public class VentanaGestionProductos extends  JFrame {
 	
 	//Se crea un cordinador_productos porque tiene un metodo para poder regresar a la ventana de inicio
-	private coordinador_productos coordinador_productos = new coordinador_productos();
+	private Coordinador_Productos coordinador_productos = new Coordinador_Productos();
 	private JFrame frame;
 	
 	
@@ -65,7 +65,7 @@ public class VentanaGestionProductos extends  JFrame {
 		setLocationRelativeTo(null);
 		setVisible(false);
 	}
-	public void setCoordinadorProductos(coordinador_productos coordinador_productos) {
+	public void setCoordinadorProductos(Coordinador_Productos coordinador_productos) {
 		this.coordinador_productos = coordinador_productos;
 	}
 

@@ -1,14 +1,14 @@
 package controlador;
 
-import vista.VentanaGestionVentas;
+import vista.VentanaGestionClientes;
 import vista.VentanaMenuPrincipal;
 //Clase de servira de union entre las distintas ventanas, ademas sera la encargada de que la informacion introducida en la ventana llegue a la clase logica
 //y de hay a la clase dao del objeto correspondiente 
-public class coordinador_ventas {
-
+public class Coordinador_Clientes {
 
 	private VentanaMenuPrincipal miVentanaMenuPrincipal;
-	private VentanaGestionVentas miVentanaGestionVentas;
+	private VentanaGestionClientes miVentanaGestionClientes;
+	
 	
 	public VentanaMenuPrincipal muestraVentanaMenuPrincipal() {
 		return miVentanaMenuPrincipal;
@@ -18,15 +18,15 @@ public class coordinador_ventas {
 		this.miVentanaMenuPrincipal = VentanaMenuPrincipal;
 	}
 	
-	public void mostrarVentanaGestionVentas(String[] args) {
-		miVentanaGestionVentas = new VentanaGestionVentas(args);
-		miVentanaGestionVentas.setVisible(true);
+	
+	public void mostrarVentanaGestionClientes(String[] args) {
+		miVentanaGestionClientes = new VentanaGestionClientes(args);
+		miVentanaGestionClientes.setVisible(true);
 	}
 	
 	public void mostrarVentanaMenuPrincipal(String[] args) {
 		miVentanaMenuPrincipal = new VentanaMenuPrincipal(args);
 		miVentanaMenuPrincipal.setVisible(true);
 	}
-	
 	
 }

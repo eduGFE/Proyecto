@@ -6,9 +6,9 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import controlador.coordinador_clientes;
-import controlador.coordinador_productos;
-import controlador.coordinador_ventas;
+import controlador.Coordinador_Clientes;
+import controlador.Coordinador_Productos;
+import controlador.Coordinador_Ventas;
 import modelo.conexion.ConexionMySQL;
 import modelo.conexion.ConexionSQLite3;
 
@@ -18,9 +18,9 @@ import java.awt.event.ActionEvent;
 
 public class VentanaMenuPrincipal extends  JFrame{
 	//Creacion de los coordinadores para poder llammar a las ventanas correcpondientes 
-	private coordinador_clientes coordinador_clientes = new coordinador_clientes();;
-	private coordinador_productos coordinador_productos = new coordinador_productos();
-	private coordinador_ventas coordinador_ventas = new coordinador_ventas();
+	private Coordinador_Clientes coordinador_clientes = new Coordinador_Clientes();;
+	private Coordinador_Productos coordinador_productos = new Coordinador_Productos();
+	private Coordinador_Ventas coordinador_ventas = new Coordinador_Ventas();
 	private JFrame Panel;
 
 	public static void main(String[] args) {
@@ -99,13 +99,13 @@ public class VentanaMenuPrincipal extends  JFrame{
 		setVisible(true);
 	}
 	//Coordinadores. Necesarios para unir cada boton con la parte logica de cada objeto.
-	public void setCoordinadorCliente(coordinador_clientes coordinador_clientes) {
+	public void setCoordinadorCliente(Coordinador_Clientes coordinador_clientes) {
 		this.coordinador_clientes = coordinador_clientes;
 	}
-	public void setCoordinadorVentas(coordinador_ventas coordinador_ventas) {
+	public void setCoordinadorVentas(Coordinador_Ventas coordinador_ventas) {
 		this.coordinador_ventas = coordinador_ventas;
 	}
-	public void setCoordinadorProductos(coordinador_productos coordinador_productos) {
+	public void setCoordinadorProductos(Coordinador_Productos coordinador_productos) {
 		this.coordinador_productos = coordinador_productos;
 	}
 	
