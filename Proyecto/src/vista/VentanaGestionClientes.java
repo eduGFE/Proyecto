@@ -8,13 +8,13 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import controlador.coordinador_clientes;
-import controlador.coordinador_ventas;
+import controlador.Coordinador_Clientes;
+import controlador.Coordinador_Ventas;
 
 
 public class VentanaGestionClientes extends  JFrame{
 	//Se crea un cordinador_clientes porque tiene un metodo para poder regresar a la ventana de inicio
-	private coordinador_clientes coordinador_clientes = new coordinador_clientes();
+	private Coordinador_Clientes coordinador_clientes = new Coordinador_Clientes();
 	private JFrame frame;
 	
 
@@ -66,7 +66,7 @@ public class VentanaGestionClientes extends  JFrame{
 		setVisible(false);
 	}
 	
-	public void setCoordinadorClientes(coordinador_clientes coordinador_clientes) {
+	public void setCoordinadorClientes(Coordinador_Clientes coordinador_clientes) {
 		this.coordinador_clientes = coordinador_clientes;
 	}
 

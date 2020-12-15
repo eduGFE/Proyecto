@@ -1,10 +1,6 @@
 package modelo.productos;
 
-public class producto_consola {
+public class Producto_Consola {
 //Clase encargada de mostrar los mensajes de productos por consola
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

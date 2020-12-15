@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import controlador.coordinador_ventas;
+import controlador.Coordinador_Ventas;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -14,7 +14,7 @@ import java.awt.event.ActionEvent;
 public class VentanaGestionVentas extends  JFrame {
 
 	//Se crea un cordinador_ventas porque tiene un metodo para poder regresar a la ventana de inicio
-	private coordinador_ventas coordinador_ventas = new coordinador_ventas();
+	private Coordinador_Ventas coordinador_ventas = new Coordinador_Ventas();
 	private JFrame frame;
 
 	public static void main(String[] args) {
@@ -66,7 +66,7 @@ public class VentanaGestionVentas extends  JFrame {
 		setLocationRelativeTo(null);
 		setVisible(false);
 	}
-	public void setCoordinadorVentas(coordinador_ventas coordinador_ventas) {
+	public void setCoordinadorVentas(Coordinador_Ventas coordinador_ventas) {
 		this.coordinador_ventas = coordinador_ventas;
 	}
 

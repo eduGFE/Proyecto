@@ -2,12 +2,12 @@ package controlador;
 
 import vista.VentanaMenuPrincipal;
 
-public class Main_principal {
+public class Main_Principal {
 
 	VentanaMenuPrincipal VentanaMenuPrincipal;
 
 	public static void main(String[] args) {
-		Main_principal inicio = new Main_principal();
+		Main_Principal inicio = new Main_Principal();
 		inicio.iniciar(args);
 
 	}
