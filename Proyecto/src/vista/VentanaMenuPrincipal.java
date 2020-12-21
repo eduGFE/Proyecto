@@ -54,12 +54,7 @@ public class VentanaMenuPrincipal extends  JFrame{
 
 	//Esta fucion reciber por parametro el argumento que le llega a la clase para conectarse a una base de datos u otra
 	private void initialize(String[] args) {
-		int argumento = Integer.parseInt(args[0]);
-		if(argumento==1) {
-		ConexionMySQL conexion = new ConexionMySQL();	 
-		}else if (argumento==2) {
-		ConexionSQLite3 conexion = new ConexionSQLite3();	
-		}
+
 		setBounds(100, 100, 250, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);

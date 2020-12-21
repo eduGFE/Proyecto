@@ -23,7 +23,6 @@ public class ConexionMySQL {
 			conexion = DriverManager.getConnection(url, login, password);
 
 			if (conexion != null) {
-				System.out.println("Conección a base de datos " + bd + " OK");
 			}
 		} catch (SQLException e) {
 			System.out.println(e);

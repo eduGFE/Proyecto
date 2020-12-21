@@ -1,5 +1,10 @@
 package controlador;
 
+import java.io.IOException;
+
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 import modelo.productos.Producto_Logica;
 import vista.VentanaGestionProductos;
 import vista.VentanaMenuPrincipal;
@@ -22,11 +27,28 @@ public class Coordinador_Productos {
 		miVentanaMenuPrincipal = new VentanaMenuPrincipal(args);
 		miVentanaMenuPrincipal.setVisible(true);
 	}
-	public void escribirproductosenfichero() {
+	
+	public void importarabbdd(String[] args,JTable table2,int fila) throws Exception {
 		miProducto_Logica =new Producto_Logica();
-		miProducto_Logica.escribirproductosenfichero();
-		
+		miProducto_Logica.importarabbdd(args,table2,fila);
 	}
+	public void consultarproductos(String[] args,DefaultTableModel model1) throws Exception {
+		miProducto_Logica =new Producto_Logica();
+		miProducto_Logica.consultarproductos(args,model1);
+	}
+	public DefaultTableModel eliminarproducto(String[] args,int id,DefaultTableModel model1) throws Exception {
+		miProducto_Logica =new Producto_Logica();
+		miProducto_Logica.eliminarproducto(args,id,model1);
+		return model1;
+	}
+	public DefaultTableModel consultarproductoporid(String[] args,int id,DefaultTableModel model1) throws Exception {
+		miProducto_Logica =new Producto_Logica();
+		miProducto_Logica.consultarproductoporid(args,id,model1);
+		return model1;
+	}
+	
+	
+	
 
 }
 

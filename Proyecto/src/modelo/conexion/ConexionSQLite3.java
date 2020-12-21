@@ -8,8 +8,8 @@ import java.sql.*;
  *
  */
 public class ConexionSQLite3 {
-   static String bd = "";
-   static String url = ""+bd;
+   static String bd = "practica_1.db";
+   static String url = "jdbc:sqlite:C:\\Users\\Javie\\OneDrive\\Desktop\\Pen\\BBDD\\SQLite\\"+bd;
 
    Connection conexion = null;
 
@@ -22,7 +22,6 @@ public class ConexionSQLite3 {
          conexion  = DriverManager.getConnection(url);
 
          if ( conexion !=null){
-            System.out.println("Conección a base de datos "+bd+" OK");
          }
       }
       catch(SQLException e){

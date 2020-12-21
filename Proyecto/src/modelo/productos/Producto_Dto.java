@@ -1,7 +1,5 @@
 package modelo.productos;
-
 import java.io.Serializable;
-
 //Claser para crear objetos productos
 public class Producto_Dto implements Serializable  {
 	private int id;
