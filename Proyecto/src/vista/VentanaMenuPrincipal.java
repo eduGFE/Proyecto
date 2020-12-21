@@ -89,7 +89,7 @@ public class VentanaMenuPrincipal extends  JFrame{
 		BotonProductos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				coordinador_productos.mostrarVentanaGestionProductos(args);
-				setVisible(false);
+				setVisible(false);   
 			}
 		});
 		BotonProductos.setBounds(36, 174, 168, 60);

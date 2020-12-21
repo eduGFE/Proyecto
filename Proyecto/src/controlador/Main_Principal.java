@@ -15,5 +15,6 @@ public class Main_Principal {
 	//Las demas ventana se generaran al pùlsar el boton correspondiente
 	private void iniciar(String[] args) {
 		VentanaMenuPrincipal = new VentanaMenuPrincipal(args);
+		
 	}
 }
