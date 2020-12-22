@@ -80,7 +80,7 @@ public class Cliente_Dto {
 				+ "\n NOMBRE: " + nombre 
 				+ "\n DIRECCIÓN: " + direccion 
 				+ "\n POBLACIÓN: " + poblacion
-				+ "\n TELÉFONO: " + poblacion 
+				+ "\n TELÉFONO: " + telef 
 				+ "\n NIF: " + nif;
 	}
 	
