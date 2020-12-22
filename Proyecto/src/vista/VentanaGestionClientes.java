@@ -52,18 +52,20 @@ public class VentanaGestionClientes extends  JFrame{
 		setBounds(100, 100, 450, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
-		JButton botonVolver = new JButton("Volver");
-		botonVolver.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				coordinador_clientes.mostrarVentanaMenuPrincipal(args);
-				setVisible(false);
-			}
-		});
-		botonVolver.setBounds(10, 237, 89, 23);
-		getContentPane().add(botonVolver);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setVisible(false);
+		
+		JButton botonVolver = new JButton("Volver");
+		botonVolver.setBounds(10, 237, 89, 23);
+		botonVolver.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				coordinador_clientes.mostrarVentanaMenuPrincipal(args);
+				coordinador_clientes.ocultarVentanaGestionClientes();
+			}
+		});
+		getContentPane().add(botonVolver);
+		
 	}
 	
 	public void setCoordinadorClientes(Coordinador_Clientes coordinador_clientes) {

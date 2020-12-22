@@ -28,5 +28,10 @@ public class Coordinador_Clientes {
 		miVentanaMenuPrincipal = new VentanaMenuPrincipal(args);
 		miVentanaMenuPrincipal.setVisible(true);
 	}
+
+	public void ocultarVentanaGestionClientes() {
+		miVentanaGestionClientes.setVisible(false);
+		
+	}
 	
 }
