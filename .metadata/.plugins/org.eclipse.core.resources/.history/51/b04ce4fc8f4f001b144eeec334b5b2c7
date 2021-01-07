@@ -1,0 +1,130 @@
+package vista;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.table.DefaultTableModel;
+
+import controlador.Coordinador_Ventas;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+public class VentanaGestionVentas extends  JFrame implements ActionListener {
+
+	//Se crea un cordinador_ventas porque tiene un metodo para poder regresar a la ventana de inicio
+	private Coordinador_Ventas coordinador_ventas = new Coordinador_Ventas();
+	private JFrame frame;
+	JButton botonInsertaVenta;
+	private JTable tablaVentas;
+	private DefaultTableModel modeloTablaVentas = new DefaultTableModel();
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					VentanaGestionVentas window = new VentanaGestionVentas(args);
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+
+	public VentanaGestionVentas(String[] args) {
+		setTitle("Ventana Gestion Ventas");
+		try {
+			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
+					UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+		} catch (Exception e) {
+			
+		}
+		initialize(args);
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize(String[] args) {
+		tablaVentas = new JTable();
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 11, 654, 174);
+		getContentPane().add(scrollPane);
+		scrollPane.setViewportView(tablaVentas);
+		modeloTablaVentas.addColumn("Id venta");
+		modeloTablaVentas.addColumn("Fecha venta");
+		modeloTablaVentas.addColumn("ID cliente");
+		modeloTablaVentas.addColumn("ID producto");
+		modeloTablaVentas.addColumn("Cantidad");
+		tablaVentas.setModel(modeloTablaVentas);
+		setBounds(100, 100, 680, 295);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(null);
+		
+		JButton botonVolver = new JButton("Volver");
+		botonVolver.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				coordinador_ventas.mostrarVentanaMenuPrincipal(args);
+				setVisible(false);
+			}
+		});
+		botonVolver.setBounds(10, 229, 89, 23);
+		getContentPane().add(botonVolver);
+		
+		botonInsertaVenta = new JButton("Insertar nueva venta");
+		botonInsertaVenta.setBounds(10, 196, 135, 23);
+		getContentPane().add(botonInsertaVenta);
+		
+		JButton botonMostrarVentas = new JButton("Mostrar ventas");
+		botonMostrarVentas.setBounds(168, 229, 144, 23);
+		getContentPane().add(botonMostrarVentas);
+		
+		JButton botonEliminarVentas = new JButton("Eliminar ventas");
+		botonEliminarVentas.setBounds(352, 229, 144, 23);
+		getContentPane().add(botonEliminarVentas);
+		
+		JComboBox comboBoxMostrar = new JComboBox();
+		comboBoxMostrar.setModel(new DefaultComboBoxModel(new String[] {"Mostrar por fecha.", "Mostrar por cliente."}));
+		comboBoxMostrar.setToolTipText("");
+		comboBoxMostrar.setBounds(168, 196, 144, 23);
+		getContentPane().add(comboBoxMostrar);
+		
+		JComboBox comboBoxEliminar = new JComboBox();
+		comboBoxEliminar.setModel(new DefaultComboBoxModel(new String[] {"Eliminar por ID.", "Eliminar por cliente."}));
+		comboBoxEliminar.setBounds(352, 196, 144, 23);
+		getContentPane().add(comboBoxEliminar);
+		
+		JButton botonExportar = new JButton("Exportar datos");
+		botonExportar.setBounds(543, 229, 121, 23);
+		getContentPane().add(botonExportar);
+		
+		JComboBox comboBoxExportar = new JComboBox();
+		comboBoxExportar.setModel(new DefaultComboBoxModel(new String[] {"Exportar XML", "Exportar CSV"}));
+		comboBoxExportar.setBounds(543, 196, 121, 23);
+		getContentPane().add(comboBoxExportar);
+		setResizable(false);
+		setLocationRelativeTo(null);
+		setVisible(false);
+	}
+	public void setCoordinadorVentas(Coordinador_Ventas coordinador_ventas) {
+		this.coordinador_ventas = coordinador_ventas;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource().equals(botonInsertaVenta)) {
+			
+		}
+		
+	}
+}

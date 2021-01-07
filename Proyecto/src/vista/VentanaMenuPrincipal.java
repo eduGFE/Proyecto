@@ -9,8 +9,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import controlador.Coordinador_Clientes;
 import controlador.Coordinador_Productos;
 import controlador.Coordinador_Ventas;
-import modelo.conexion.ConexionMySQL;
-import modelo.conexion.ConexionSQLite3;
+
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;

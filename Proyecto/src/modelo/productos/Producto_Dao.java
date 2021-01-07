@@ -16,9 +16,6 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Driver;
 
 import modelo.conexion.Conexion;
-import modelo.conexion.ConexionMySQL;
-import modelo.conexion.ConexionSQLite3;
-
 import java.sql.*;
 
 //Clase que contendra las sentancias SQL necesarias para llevar la gestion de los productos
