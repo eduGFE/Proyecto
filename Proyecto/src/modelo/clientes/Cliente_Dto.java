@@ -1,4 +1,7 @@
 package modelo.clientes;
+
+import java.io.Serializable;
+
 /**
  * Clase que nos permite crear un objeto POJO (Plain Old Java Object).
  * Será un objeto que va a estar viajando por todas las capas, 
@@ -13,22 +16,32 @@ package modelo.clientes;
  * NOMBRE varchar(50), no nulo.
  * DIRECCION varchar(50).
  * POBLACION varchar(50).
- * TELEF varchar(20).
+ * TELEF numérico(20).
  * NIF varchar(10).
  */
 /**
  * @author Miguel Herrero López 
  */
-public class Cliente_Dto {
+public class Cliente_Dto implements Serializable{
 	
 	//Atributos encapsulados:
 	private int idCliente;
 	private String nombre;
 	private String direccion;
 	private String poblacion;
-	private int telef;
+	private String telef; 
 	private String nif;
 	
+	public Cliente_Dto() {
+	}
+	
+	public Cliente_Dto(String nombre,String direccion,String poblacion,String telef,String nif) {
+		this.nombre = nombre;
+		this.direccion = direccion;
+		this.poblacion = poblacion;
+		this.telef = telef;
+		this.nif = nif;
+	}
 	/*
 	 * Getters: Devuelve los valores de cada atributo.
 	 */
@@ -44,7 +57,7 @@ public class Cliente_Dto {
 	public String getPoblacion() {
 		return poblacion;
 	}
-	public int getTelef() {
+	public String getTelef() {
 		return telef;
 	}
 	public String getNif() {
@@ -55,6 +68,9 @@ public class Cliente_Dto {
 	 * Setters: Fija los valores de cada atributo, menos para el id, 
 	 * puesto que este es generado automáticamente por el SGBD.
 	 */
+	public void setIdCliente(int idCliente) {
+		this.idCliente = idCliente;
+	}
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
@@ -64,7 +80,7 @@ public class Cliente_Dto {
 	public void setPoblacion(String poblacion) {
 		this.poblacion = poblacion;
 	}
-	public void setTelef(int telef) {
+	public void setTelef(String telef) {
 		this.telef = telef;
 	}
 	public void setNif(String nif) {
@@ -76,7 +92,7 @@ public class Cliente_Dto {
 	 */
 	public String toString() {
 		return "--------------------------------------------------"
-				+ "\n ID: " + idCliente 
+				//+ "\n ID: " + idCliente 
 				+ "\n NOMBRE: " + nombre 
 				+ "\n DIRECCIÓN: " + direccion 
 				+ "\n POBLACIÓN: " + poblacion
