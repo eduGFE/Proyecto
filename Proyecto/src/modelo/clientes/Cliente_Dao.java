@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import modelo.conexion.Conexion;
 import modelo.conexion.ConexionMySQL;
 import modelo.conexion.ConexionSQLite3;
 import vista.VentanaInsertarClientes;
@@ -29,14 +30,14 @@ public class Cliente_Dao {
 		ArrayList<Cliente_Dto> listaClientesDTO = new ArrayList<Cliente_Dto>();
 		boolean existe=false;
 		
-		/*  FUTURO -- PROPUESTA UNA SOLA CLASE CONEXION A LA QUE LE LLEGUE EL ARGUMENTO
+		//  FUTURO -- PROPUESTA UNA SOLA CLASE CONEXION A LA QUE LE LLEGUE EL ARGUMENTO
 		 
 		//Creamos conexion con BD
 		Conexion conex= new Conexion(tipoConex);
 	
 		try {
 			//Creamos sentencia a ejecutar.
-			PreparedStatement sentencia = conex.getConnection().prepareStatement
+			PreparedStatement sentencia = conex.getConexion().prepareStatement
 					("SELECT * FROM clientes where nif = ? ");
 			sentencia.setString(1, nif);
 			//Ejecutamos la sentencia y recogemos el resultado.
@@ -68,82 +69,7 @@ public class Cliente_Dao {
 		} else { //Si no existe...		
 			return null; //Devolvemos null.				
 		}
-		*/
-
-		////////  ACTUAL /// BORRAR HASTA EL FINAL SI PONEMOS SOLO UNA CLASE CONEXIÓN
-		if (tipoConex.equals("1")) { //Conexion a ConexionMySQL
-			
-			ConexionMySQL conex= new ConexionMySQL();
-			
-			try {
-				//Creamos sentencia a ejecutar.
-				PreparedStatement sentencia = conex.getConnection().prepareStatement
-						("SELECT * FROM clientes where nif = ? ");
-				sentencia.setString(1, nif);
-				//Ejecutamos la sentencia y recogemos el resultado.
-				ResultSet res = sentencia.executeQuery();
-				//Recorremos el resultado obtenido, guardándolo en un objeto tipo Cliente_Dto.
-				while(res.next()){
-					existe=true; //Si entra en el while, es que existen registros coincidentes.
-					//Creamos objeto auxiliar para posteriormente guardar cada registro obtenido.
-					Cliente_Dto miClienteDTOAux= new Cliente_Dto();
-					//Actualizamos el objeto auxiliar con cada registro obtenido.
-					miClienteDTOAux.setIdCliente(res.getInt("id"));
-					miClienteDTOAux.setNombre(res.getString("nombre"));
-					miClienteDTOAux.setDireccion(res.getString("direccion"));
-					miClienteDTOAux.setPoblacion(res.getString("poblacion"));
-					miClienteDTOAux.setTelef(res.getString("telef"));
-					miClienteDTOAux.setNif(res.getString("nif"));
-					//Añadimos cada objeto a la lista de Clientes.
-					listaClientesDTO.add(miClienteDTOAux);
-				}	
-				sentencia.close(); //Cerramos sentencia y desconectamos de BD.
-				conex.desconectar();
-
-			} catch (SQLException e) {
-				mostrarMensajeError("Error! No se pudieron obtener datos !");
-			}	
-
-			
-		} else {//Conexion a ConexionSQLite3
-			ConexionSQLite3 conex= new ConexionSQLite3();
-			
-			try {
-				//Creamos sentencia a ejecutar.
-				PreparedStatement sentencia = conex.getConnection().prepareStatement
-						("SELECT * FROM clientes where nif = ? ");
-				sentencia.setString(1, nif);
-				//Ejecutamos la sentencia y recogemos el resultado.
-				ResultSet res = sentencia.executeQuery();
-				//Recorremos el resultado obtenido, guardándolo en un objeto tipo Cliente_Dto.
-				while(res.next()){
-					existe=true; //Si entra en el while, es que existen registros coincidentes.
-					//Creamos objeto auxiliar para posteriormente guardar cada registro obtenido.
-					Cliente_Dto miClienteDTOAux= new Cliente_Dto();
-					//Actualizamos el objeto auxiliar con cada registro obtenido.
-					miClienteDTOAux.setIdCliente(res.getInt("id"));
-					miClienteDTOAux.setNombre(res.getString("nombre"));
-					miClienteDTOAux.setDireccion(res.getString("direccion"));
-					miClienteDTOAux.setPoblacion(res.getString("poblacion"));
-					miClienteDTOAux.setTelef(res.getString("telef"));
-					miClienteDTOAux.setNif(res.getString("nif"));
-					//Añadimos cada objeto a la lista de Clientes.
-					listaClientesDTO.add(miClienteDTOAux);
-				}	
-				sentencia.close(); //Cerramos sentencia y desconectamos de BD.
-				conex.desconectar();
-
-			} catch (SQLException e) {
-				mostrarMensajeError("Error! No se pudieron obtener datos !");
-			}	
-		}
 		
-
-		if (existe) { //Si existe algún cliente...		
-			return listaClientesDTO; //Devolvemos la lista de Clientes_Dto.	
-		} else { //Si no existe...		
-			return null; //Devolvemos null.				
-		}
 		
 	}
 
@@ -156,7 +82,7 @@ public class Cliente_Dao {
 
 		try {
 			//Creamos sentencia a ejecutar.
-			PreparedStatement sentencia = conex.getConnection().prepareStatement
+			PreparedStatement sentencia = conex.getConexion().prepareStatement
 					("INSERT INTO clientes VALUES (?,?,?,?,?,?)");
 			sentencia.setString(1, null);
 			sentencia.setString(2, miClienteDTO.getNombre());
@@ -194,7 +120,7 @@ public class Cliente_Dao {
 		boolean existen=false;
 
 		try { //Creamos sentencia a ejecutar.
-			PreparedStatement sentencia = conex.getConnection().prepareStatement
+			PreparedStatement sentencia = conex.getConexion().prepareStatement
 					("SELECT * FROM clientes");
 			//Ejecutamos la sentencia y recogemos el resultado.
 			ResultSet res = sentencia.executeQuery();
@@ -238,7 +164,7 @@ public class Cliente_Dao {
 
 		try {
 			//Creamos sentencia a ejecutar.
-			PreparedStatement sentencia = conex.getConnection().prepareStatement
+			PreparedStatement sentencia = conex.getConexion().prepareStatement
 					("UPDATE clientes SET direccion=?, poblacion=?, telef=? WHERE id=?");
 			sentencia.setString(1, newDireccion);
 			sentencia.setString(2, newPoblacion);
@@ -270,7 +196,7 @@ public class Cliente_Dao {
 
 		try {
 			//Creamos sentencia a ejecutar.
-			PreparedStatement sentencia = conex.getConnection().prepareStatement
+			PreparedStatement sentencia = conex.getConexion().prepareStatement
 					("DELETE FROM clientes WHERE nif=?");
 			sentencia.setString(1, nif);
 

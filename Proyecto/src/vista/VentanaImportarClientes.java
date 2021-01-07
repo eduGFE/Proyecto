@@ -170,7 +170,7 @@ public class VentanaImportarClientes extends JFrame {
 			}
 		}else {
 			infoTablaNombreArchivos.addRow(new Object[] {"El directorio NO existe"});
-			btnImportarArchivos.setEnabled(false);
+//			//btnImportarArchivos.setEnabled(true);
 		}
 	}
 	

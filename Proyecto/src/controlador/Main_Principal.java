@@ -2,15 +2,16 @@ package controlador;
 
 import javax.swing.JOptionPane;
 
-<<<<<<< HEAD
-=======
+
 import modelo.clientes.Cliente_Logica;
+import modelo.productos.Producto_Logica;
 import vista.VentanaBorrarClientes;
 import vista.VentanaConsultarClientes;
 import vista.VentanaGestionClientes;
+import vista.VentanaGestionProductos;
 import vista.VentanaImportarClientes;
 import vista.VentanaInsertarClientes;
->>>>>>> feature/RamaMiguel
+
 import vista.VentanaMenuPrincipal;
 import vista.VentanaModificarClientes;
 
@@ -27,6 +28,14 @@ public class Main_Principal {
 	private VentanaBorrarClientes miVentanaBorrarClientes;
 	private VentanaConsultarClientes miVentanaConsultarClientes;
 	
+	
+	
+	//SUBSISTEMA PRODUCTOS:
+	private Coordinador_Productos miCoordinador_productos;
+	private Producto_Logica miLogica_Producto;
+	private VentanaGestionProductos miVentanaGestionProductos;
+
+	
 	public static void main(String[] args) {
 		Main_Principal inicio = new Main_Principal();
 		inicio.iniciar(args);
@@ -36,37 +45,24 @@ public class Main_Principal {
 	//Las demas ventana se generaran al pùlsar el boton correspondiente
 	private void iniciar(String[] args) {
 		
-		if(args.length==0) {
-<<<<<<< HEAD
-			JOptionPane.showMessageDialog(null, "No ha insertado un argumento valido", "Información",
-=======
-			JOptionPane.showMessageDialog(null, "No ha insertado un argumento válido", "Información",
->>>>>>> feature/RamaMiguel
-					JOptionPane.INFORMATION_MESSAGE);
+		if(args.length!=1) {
+			JOptionPane.showMessageDialog(null, "No ha insertado un argumento valido", "Información",JOptionPane.INFORMATION_MESSAGE);
 			System.exit(0);
 		}else {
 			int argumento = Integer.parseInt(args[0]);
 			if(argumento!=1&&argumento!=2) {
-<<<<<<< HEAD
-				JOptionPane.showMessageDialog(null, "No ha insertado un argumento valido", "Información",
-=======
-				JOptionPane.showMessageDialog(null, "No ha insertado un argumento válido", "Información",
->>>>>>> feature/RamaMiguel
-						JOptionPane.INFORMATION_MESSAGE);
+
+				JOptionPane.showMessageDialog(null, "No ha insertado un argumento valido", "Información",JOptionPane.INFORMATION_MESSAGE);
+
+				JOptionPane.showMessageDialog(null, "No ha insertado un argumento válido", "Información",JOptionPane.INFORMATION_MESSAGE);
 				System.exit(0);
 			}	
 		}if(args.length!=0&&(args[0].equals("1")||args[0].equals("2"))) {
-<<<<<<< HEAD
-			VentanaMenuPrincipal = new VentanaMenuPrincipal(args);	
-		}
-		
-		
-	}
-}
-=======
-			VentanaMenuPrincipal = new VentanaMenuPrincipal(args);
-			//SUBSISTEMA CLIENTES:
+			
+			
 			String tipoConex = args[0]; //Guardamos argumento que define la conexión en un String. 
+			VentanaMenuPrincipal = new VentanaMenuPrincipal(tipoConex);
+			//SUBSISTEMA CLIENTES:
 			miCoordinador_clientes= new Coordinador_Clientes();
 			miLogica_Cliente= new Cliente_Logica();	
 			miVentanaGestionClientes= new VentanaGestionClientes();
@@ -91,7 +87,13 @@ public class Main_Principal {
 			miCoordinador_clientes.setVentanaModificarClientes(miVentanaModificarClientes);
 			miCoordinador_clientes.setVentanaBorrarClientes(miVentanaBorrarClientes);
 			miCoordinador_clientes.setVentanaConsultarClientes(miVentanaConsultarClientes);
+			
+			
+			miCoordinador_productos= new Coordinador_Productos();
+			miLogica_Producto= new Producto_Logica();
+			miVentanaGestionProductos = new VentanaGestionProductos(tipoConex);
+
 		}			
 	}	
 }
->>>>>>> feature/RamaMiguel
+

@@ -23,12 +23,12 @@ public class VentanaMenuPrincipal extends  JFrame{
 	private Coordinador_Ventas coordinador_ventas = new Coordinador_Ventas();
 	private JFrame Panel;
 
-	public static void main(String[] args) {
+	public static void main(String tipoConex) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaMenuPrincipal window = new VentanaMenuPrincipal(args);
-					VentanaGestionVentas miVentanaGestionVentas= new VentanaGestionVentas(args);
+					VentanaMenuPrincipal window = new VentanaMenuPrincipal(tipoConex);
+					VentanaGestionVentas miVentanaGestionVentas= new VentanaGestionVentas(tipoConex);
 					window.Panel.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -36,7 +36,7 @@ public class VentanaMenuPrincipal extends  JFrame{
 			}
 		});
 	}
-	public VentanaMenuPrincipal(String[] args) {
+	public VentanaMenuPrincipal(String tipoConex) {
 		//Cambia la apariencia de las ventanas
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -49,11 +49,11 @@ public class VentanaMenuPrincipal extends  JFrame{
 			
 		}
 		
-		initialize(args);
+		initialize(tipoConex);
 	}
 
 	//Esta fucion reciber por parametro el argumento que le llega a la clase para conectarse a una base de datos u otra
-	private void initialize(String[] args) {
+	private void initialize(String tipoConex) {
 
 		setBounds(100, 100, 250, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,7 +62,7 @@ public class VentanaMenuPrincipal extends  JFrame{
 		JButton BotonVentas = new JButton("Gestión Ventas");
 		BotonVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				coordinador_ventas.mostrarVentanaGestionVentas(args);
+				coordinador_ventas.mostrarVentanaGestionVentas(tipoConex);
 				setVisible(false);
 				
 			}
@@ -83,7 +83,7 @@ public class VentanaMenuPrincipal extends  JFrame{
 		JButton BotonProductos = new JButton("Gestión Productos");
 		BotonProductos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				coordinador_productos.mostrarVentanaGestionProductos(args);
+				coordinador_productos.mostrarVentanaGestionProductos(tipoConex);
 				setVisible(false);   
 			}
 		});
