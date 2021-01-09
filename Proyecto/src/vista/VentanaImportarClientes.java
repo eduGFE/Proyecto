@@ -103,7 +103,6 @@ public class VentanaImportarClientes extends JFrame {
 		infoTablaNombreArchivos = new DefaultTableModel();
 		infoTablaNombreArchivos.addColumn("Archivos disponibles:");
 		tablaNombreArchivos.setModel(infoTablaNombreArchivos);
-		rellenarTablaNombreArchivos();
 
 		//Botón IMPORTAR ARCHIVO:
 		btnImportarArchivos = new JButton("IMPORTAR archivo/s seleccionado/s");
@@ -148,6 +147,8 @@ public class VentanaImportarClientes extends JFrame {
 		});
 		btnVolver.setBounds(20, 219, 69, 23);
 		getContentPane().add(btnVolver);
+		
+		rellenarTablaNombreArchivos();
 	}
 
 	/**

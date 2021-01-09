@@ -24,26 +24,13 @@ import controlador.Coordinador_Productos;
 public class VentanaGestionProductos extends JFrame implements Runnable {
 	// Se crea un cordinador_productos porque tiene un metodo para poder regresar a
 	// la ventana de inicio
-	private Coordinador_Productos coordinador_productos = new Coordinador_Productos();
+	private Coordinador_Productos coordinador_productos;
 	private JFrame frame;
 	//tablas
 	private JTable table1;
 	private DefaultTableModel model1 = new DefaultTableModel();
 	private JTable table2;
 	private DefaultTableModel model2 = new DefaultTableModel();
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaGestionProductos window = new VentanaGestionProductos(args);
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	public VentanaGestionProductos(String[] args) {
 		try {
@@ -86,7 +73,7 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 		JButton botonVolver = new JButton("Volver");
 		botonVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				coordinador_productos.mostrarVentanaMenuPrincipal(args);
+				coordinador_productos.mostrarVentanaMenuPrincipal();
 				setVisible(false);
 			}
 		});

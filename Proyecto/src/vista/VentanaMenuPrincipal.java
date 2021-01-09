@@ -1,7 +1,5 @@
 package vista;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -9,8 +7,6 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import controlador.Coordinador_Clientes;
 import controlador.Coordinador_Productos;
 import controlador.Coordinador_Ventas;
-import modelo.conexion.ConexionMySQL;
-import modelo.conexion.ConexionSQLite3;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -19,23 +15,10 @@ import java.awt.event.ActionEvent;
 public class VentanaMenuPrincipal extends  JFrame{
 	//Creacion de los coordinadores para poder llammar a las ventanas correcpondientes 
 	private Coordinador_Clientes miCoordinador_clientes;
-	private Coordinador_Productos coordinador_productos = new Coordinador_Productos();
-	private Coordinador_Ventas coordinador_ventas = new Coordinador_Ventas();
+	private Coordinador_Productos coordinador_productos;
+	private Coordinador_Ventas coordinador_ventas;
 	private JFrame Panel;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaMenuPrincipal window = new VentanaMenuPrincipal(args);
-					VentanaGestionVentas miVentanaGestionVentas= new VentanaGestionVentas(args);
-					window.Panel.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 	public VentanaMenuPrincipal(String[] args) {
 		//Cambia la apariencia de las ventanas
 		try {
@@ -83,7 +66,7 @@ public class VentanaMenuPrincipal extends  JFrame{
 		JButton BotonProductos = new JButton("Gestión Productos");
 		BotonProductos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				coordinador_productos.mostrarVentanaGestionProductos(args);
+				coordinador_productos.mostrarVentanaGestionProductos();
 				setVisible(false);   
 			}
 		});

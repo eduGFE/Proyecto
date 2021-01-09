@@ -7,6 +7,10 @@ import java.sql.SQLException;
 public class Conexion {
 	//atributo donde se almacena la conexion creada
 	Connection conexion;
+	static String bd = "PRACTICA_1";
+	static String login = "root";
+	static String password = "";
+	static String url = "jdbc:mysql://localhost/" + bd;
 	//atributo que determina el tipo de conexion en funcion del argumento que se pase al main
 	String tipo;
 	public Conexion(String argumento){
@@ -14,8 +18,10 @@ public class Conexion {
 		try {
 			//Si es 1 se conecta a MySQL
 			if(tipo.equals("1")) {
+				// obtenemos el driver de para mysql
 				Class.forName("com.mysql.jdbc.Driver");
-				this.conexion=DriverManager.getConnection("jdbc:mysql://localhost/PRACTICA_1");
+				// obtenemos la conexión
+				conexion = DriverManager.getConnection(url, login, password);
 				//Si es 2 se conecta a SQLite
 			}else if(tipo.equals("2")) {
 				Class.forName("org.sqlite.JDBC");
@@ -32,6 +38,17 @@ public class Conexion {
 	public Connection getConexion() {
 		return conexion;
 	}
-	
-	
+
+	/**
+	 * Metodo que nos permite cerrar la conexión.
+	 */
+	public void desconectar(){
+		try {
+			conexion.close();
+			System.out.println("Conexión con BD cerrada correctamente.");
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+	}
+
 }

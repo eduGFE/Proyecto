@@ -2,15 +2,14 @@ package controlador;
 
 import javax.swing.JOptionPane;
 
-<<<<<<< HEAD
-=======
 import modelo.clientes.Cliente_Logica;
+import modelo.productos.Producto_Logica;
 import vista.VentanaBorrarClientes;
 import vista.VentanaConsultarClientes;
 import vista.VentanaGestionClientes;
+import vista.VentanaGestionProductos;
 import vista.VentanaImportarClientes;
 import vista.VentanaInsertarClientes;
->>>>>>> feature/RamaMiguel
 import vista.VentanaMenuPrincipal;
 import vista.VentanaModificarClientes;
 
@@ -26,6 +25,11 @@ public class Main_Principal {
 	private VentanaModificarClientes miVentanaModificarClientes;
 	private VentanaBorrarClientes miVentanaBorrarClientes;
 	private VentanaConsultarClientes miVentanaConsultarClientes;
+	//SUBSISTEMA PRODUCTOS:
+	private Coordinador_Productos coordinador_productos;
+	private Producto_Logica miLogica_Producto;
+	private VentanaGestionProductos miVentanaGestionProductos;
+	
 	
 	public static void main(String[] args) {
 		Main_Principal inicio = new Main_Principal();
@@ -37,44 +41,30 @@ public class Main_Principal {
 	private void iniciar(String[] args) {
 		
 		if(args.length==0) {
-<<<<<<< HEAD
-			JOptionPane.showMessageDialog(null, "No ha insertado un argumento valido", "Información",
-=======
 			JOptionPane.showMessageDialog(null, "No ha insertado un argumento válido", "Información",
->>>>>>> feature/RamaMiguel
 					JOptionPane.INFORMATION_MESSAGE);
 			System.exit(0);
 		}else {
 			int argumento = Integer.parseInt(args[0]);
 			if(argumento!=1&&argumento!=2) {
-<<<<<<< HEAD
-				JOptionPane.showMessageDialog(null, "No ha insertado un argumento valido", "Información",
-=======
 				JOptionPane.showMessageDialog(null, "No ha insertado un argumento válido", "Información",
->>>>>>> feature/RamaMiguel
 						JOptionPane.INFORMATION_MESSAGE);
 				System.exit(0);
 			}	
 		}if(args.length!=0&&(args[0].equals("1")||args[0].equals("2"))) {
-<<<<<<< HEAD
-			VentanaMenuPrincipal = new VentanaMenuPrincipal(args);	
-		}
-		
-		
-	}
-}
-=======
 			VentanaMenuPrincipal = new VentanaMenuPrincipal(args);
 			//SUBSISTEMA CLIENTES:
 			String tipoConex = args[0]; //Guardamos argumento que define la conexión en un String. 
 			miCoordinador_clientes= new Coordinador_Clientes();
 			miLogica_Cliente= new Cliente_Logica();	
+			
 			miVentanaGestionClientes= new VentanaGestionClientes();
 			miVentanaImportarClientes= new VentanaImportarClientes(tipoConex);
 			miVentanaInsertarClientes= new VentanaInsertarClientes(tipoConex);
 			miVentanaModificarClientes= new VentanaModificarClientes(tipoConex);
 			miVentanaBorrarClientes= new VentanaBorrarClientes(tipoConex);
-			miVentanaConsultarClientes= new VentanaConsultarClientes(tipoConex);	
+			miVentanaConsultarClientes= new VentanaConsultarClientes(tipoConex);
+			
 			miLogica_Cliente.setCoordinadorClientes(miCoordinador_clientes);
 			VentanaMenuPrincipal.setCoordinadorClientes(miCoordinador_clientes);
 			miVentanaGestionClientes.setCoordinadorClientes(miCoordinador_clientes);
@@ -82,7 +72,8 @@ public class Main_Principal {
 			miVentanaInsertarClientes.setCoordinadorClientes(miCoordinador_clientes);
 			miVentanaModificarClientes.setCoordinadorClientes(miCoordinador_clientes);
 			miVentanaBorrarClientes.setCoordinadorClientes(miCoordinador_clientes);
-			miVentanaConsultarClientes.setCoordinadorClientes(miCoordinador_clientes);	
+			miVentanaConsultarClientes.setCoordinadorClientes(miCoordinador_clientes);
+			
 			miCoordinador_clientes.setCliente_Logica(miLogica_Cliente);
 			miCoordinador_clientes.setVentanaMenuPrincipal(VentanaMenuPrincipal);
 			miCoordinador_clientes.setVentanaGestionClientes(miVentanaGestionClientes);
@@ -91,7 +82,20 @@ public class Main_Principal {
 			miCoordinador_clientes.setVentanaModificarClientes(miVentanaModificarClientes);
 			miCoordinador_clientes.setVentanaBorrarClientes(miVentanaBorrarClientes);
 			miCoordinador_clientes.setVentanaConsultarClientes(miVentanaConsultarClientes);
+			//SUBSISTEMA PRODUCTOS:
+			coordinador_productos= new Coordinador_Productos();
+			miLogica_Producto= new Producto_Logica();	
+			
+			miVentanaGestionProductos= new VentanaGestionProductos(args);
+			
+			miLogica_Producto.setCoordinadorProductos(coordinador_productos);
+			VentanaMenuPrincipal.setCoordinadorProductos(coordinador_productos);
+			miVentanaGestionProductos.setCoordinadorProductos(coordinador_productos);
+			
+			coordinador_productos.setProducto_Logica(miLogica_Producto);
+			coordinador_productos.setVentanaMenuPrincipal(VentanaMenuPrincipal);
+			coordinador_productos.setVentanaGestionProductos(miVentanaGestionProductos);
+			
 		}			
 	}	
 }
->>>>>>> feature/RamaMiguel

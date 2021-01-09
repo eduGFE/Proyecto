@@ -76,7 +76,7 @@ public class Cliente_Logica {
 		
 		//Creamos objeto Cliente_Dao para poder llamar a los métodos de dicha clase.
 		Cliente_Dao miClienteDAO = new Cliente_Dao();
-		return miClienteDAO.consultarTodosClientes( tipoConex);
+		return miClienteDAO.consultarTodosClientes(tipoConex);
 	}
 	
 	/**      

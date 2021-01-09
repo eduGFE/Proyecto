@@ -165,7 +165,7 @@ public class VentanaModificarClientes extends JFrame {
 	 */	
 	private void rellenarTablaListadoClientes(String tipoConex) {
 		//Creamos ArrayList donde se guardarán los objetos DTO de los clientes.
-		ArrayList<Cliente_Dto> listaClientesDTO = miCoordinador_clientes.consultarTodosClientes( tipoConex);
+		ArrayList<Cliente_Dto> listaClientesDTO = miCoordinador_clientes.consultarTodosClientes(tipoConex);
 		
 		if (listaClientesDTO!=null) { //Si hay clientes en la BD rellenamos la tabla
 
