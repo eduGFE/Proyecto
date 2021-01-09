@@ -18,7 +18,7 @@ import java.awt.event.ActionEvent;
 
 public class VentanaMenuPrincipal extends  JFrame{
 	//Creacion de los coordinadores para poder llammar a las ventanas correcpondientes 
-	private Coordinador_Clientes miCoordinador_clientes;
+	private Coordinador_Clientes miCoordinador_clientes = new Coordinador_Clientes();
 	private Coordinador_Productos coordinador_productos = new Coordinador_Productos();
 	private Coordinador_Ventas coordinador_ventas = new Coordinador_Ventas();
 	private JFrame Panel;
@@ -73,8 +73,8 @@ public class VentanaMenuPrincipal extends  JFrame{
 		JButton BotonClientes = new JButton("Gestión Clientes");
 		BotonClientes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				miCoordinador_clientes.ocultarVentanaMenuPrincipal();
 				miCoordinador_clientes.mostrarVentanaGestionClientes();
+				setVisible(false);
 			}
 		});
 		BotonClientes.setBounds(37, 103, 168, 60);

@@ -2,7 +2,6 @@ package controlador;
 
 import javax.swing.JOptionPane;
 
-
 import modelo.clientes.Cliente_Logica;
 import modelo.productos.Producto_Logica;
 import vista.VentanaBorrarClientes;
@@ -11,7 +10,6 @@ import vista.VentanaGestionClientes;
 import vista.VentanaGestionProductos;
 import vista.VentanaImportarClientes;
 import vista.VentanaInsertarClientes;
-
 import vista.VentanaMenuPrincipal;
 import vista.VentanaModificarClientes;
 

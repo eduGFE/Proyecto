@@ -84,7 +84,7 @@ public class Cliente_Dao {
 			//Creamos sentencia a ejecutar.
 			PreparedStatement sentencia = conex.getConexion().prepareStatement
 					("INSERT INTO clientes VALUES (?,?,?,?,?,?)");
-			sentencia.setString(1, null);
+			sentencia.setInt(1, 0);
 			sentencia.setString(2, miClienteDTO.getNombre());
 			sentencia.setString(3, miClienteDTO.getDireccion());
 			sentencia.setString(4, miClienteDTO.getPoblacion());
