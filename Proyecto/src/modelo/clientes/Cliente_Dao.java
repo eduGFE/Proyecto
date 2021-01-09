@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import modelo.conexion.Conexion;
-import modelo.conexion.ConexionMySQL;
-import modelo.conexion.ConexionSQLite3;
 import vista.VentanaInsertarClientes;
 
 /**

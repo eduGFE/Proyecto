@@ -10,7 +10,7 @@ public class Conexion {
 	static String bd = "PRACTICA_1";
 	static String login = "root";
 	static String password = "";
-	static String url = "jdbc:mysql://localhost/" + bd;
+	static String urlMySQL = "jdbc:mysql://localhost/" + bd;
 	//atributo que determina el tipo de conexion en funcion del argumento que se pase al main
 	String tipo;
 	public Conexion(String argumento){
@@ -21,12 +21,14 @@ public class Conexion {
 				// obtenemos el driver de para mysql
 				Class.forName("com.mysql.jdbc.Driver");
 				// obtenemos la conexión
-				conexion = DriverManager.getConnection(url, login, password);
+				conexion = DriverManager.getConnection(urlMySQL, login, password);
+				System.out.println("Conectado a MySQL.");
 				//Si es 2 se conecta a SQLite
 			}else if(tipo.equals("2")) {
 				Class.forName("org.sqlite.JDBC");
-				this.conexion=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\vlagu\\Desktop\\sqlite-tools-win32-x86-3330000"
+				conexion = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\vlagu\\Desktop\\sqlite-tools-win32-x86-3330000"
 						+ "\\sqlite-tools-win32-x86-3330000\\sqlite-tools-win32-x86-3330000\\PRACTICA_1");
+				System.out.println("Conectado a SQLite.");
 			}
 		}catch(ClassNotFoundException e) {
 			System.out.println("No se ha podido cargar el driver");

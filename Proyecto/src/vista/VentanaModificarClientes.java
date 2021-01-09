@@ -205,7 +205,6 @@ public class VentanaModificarClientes extends JFrame {
 			String newTelefono = obtencionDatosNuevos(filaSelect, 4, radTelefono, "TELÉFONO", idClienteSelect);
 
 			if (newDireccion!=null && newPoblacion!=null && newTelefono!=null) {
-				System.out.println(idClienteSelect+newDireccion+newPoblacion+newTelefono);
 				//Comenzamos proceso de actualización de Cliente en BD.
 				miCoordinador_clientes.modificarCliente(idClienteSelect, newDireccion, newPoblacion, newTelefono,  tipoConex);
 			}else {
