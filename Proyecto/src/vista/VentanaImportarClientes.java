@@ -105,7 +105,8 @@ public class VentanaImportarClientes extends JFrame {
 		tablaNombreArchivos.setModel(infoTablaNombreArchivos);
 
 		//Botón IMPORTAR ARCHIVO:
-		btnImportarArchivos = new JButton("IMPORTAR archivo/s seleccionado/s");
+		btnImportarArchivos = new JButton("IMPORTAR a la App archivo/s seleccionado/s");
+		btnImportarArchivos.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		btnImportarArchivos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				accionesBotonImportarArchivo();
