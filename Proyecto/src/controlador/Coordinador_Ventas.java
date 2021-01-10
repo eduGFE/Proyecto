@@ -18,13 +18,13 @@ public class Coordinador_Ventas {
 		this.miVentanaMenuPrincipal = VentanaMenuPrincipal;
 	}
 	
-	public void mostrarVentanaGestionVentas(String[] args) {
-		miVentanaGestionVentas = new VentanaGestionVentas(args);
+	public void mostrarVentanaGestionVentas(String tipoConex) {
+		miVentanaGestionVentas = new VentanaGestionVentas(tipoConex);
 		miVentanaGestionVentas.setVisible(true);
 	}
 	
-	public void mostrarVentanaMenuPrincipal(String[] args) {
-		miVentanaMenuPrincipal = new VentanaMenuPrincipal(args);
+	public void mostrarVentanaMenuPrincipal(String tipoConex) {
+		miVentanaMenuPrincipal = new VentanaMenuPrincipal(tipoConex);
 		miVentanaMenuPrincipal.setVisible(true);
 	}
 	

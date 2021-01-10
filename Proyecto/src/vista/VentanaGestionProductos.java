@@ -32,7 +32,24 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 	private JTable table2;
 	private DefaultTableModel model2 = new DefaultTableModel();
 
+
 	public VentanaGestionProductos(String[] args) {
+
+	public static void main(String tipoConex) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					VentanaGestionProductos window = new VentanaGestionProductos(tipoConex);
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	public VentanaGestionProductos(String tipoConex) {
+
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
@@ -43,10 +60,10 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 		} catch (Exception e) {
 
 		}
-		initialize(args);
+		initialize(tipoConex);
 	}
 
-	public void initialize(String[] args) {
+	public void initialize(String tipoConex) {
 		table1 = new JTable();
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(10, 42, 444, 171);
@@ -73,7 +90,11 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 		JButton botonVolver = new JButton("Volver");
 		botonVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
 				coordinador_productos.mostrarVentanaMenuPrincipal();
+
+				coordinador_productos.mostrarVentanaMenuPrincipal(tipoConex);
+
 				setVisible(false);
 			}
 		});
@@ -85,7 +106,7 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 			public void actionPerformed(ActionEvent arg0) {
 				int fila = table2.getSelectedRow();
 				try {
-					coordinador_productos.importarabbdd(args, table2, fila);
+					coordinador_productos.importarabbdd(tipoConex, table2, fila);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -110,7 +131,7 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 									JOptionPane.INFORMATION_MESSAGE);
 						}else {
 							if (!id.equals("")) {
-								coordinador_productos.eliminarproducto(args, Integer.valueOf(id), model1);
+								coordinador_productos.eliminarproducto(tipoConex, Integer.valueOf(id), model1);
 							}
 						}
 					}
@@ -142,7 +163,7 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 						}
 						 else {
 							if (!id.equals("")) {
-								coordinador_productos.consultarproductoporid(args, Integer.valueOf(id), model1);
+								coordinador_productos.consultarproductoporid(tipoConex, Integer.valueOf(id), model1);
 							}
 
 						}
@@ -165,7 +186,7 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					coordinador_productos.consultarproductos(args, model1);
+					coordinador_productos.consultarproductos(tipoConex, model1);
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -209,3 +230,4 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 
 	}
 }
+ }

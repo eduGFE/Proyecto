@@ -208,7 +208,7 @@ public class Coordinador_Clientes {
 * Lo utilizamos antes de mostrarla.
 * Recibe por parámetros un array con todos los componentes del panel Principal de la ventana.
 */
-	private void inicializarComponentes(Component[] componentes) {
+	private static void inicializarComponentes(Component[] componentes) {
 		//Recorremos array con todos los componentes de la ventana:
 		for (int i = 0; i < componentes.length; i++) {
 
