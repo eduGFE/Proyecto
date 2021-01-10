@@ -26,8 +26,7 @@ public class Conexion {
 				//Si es 2 se conecta a SQLite
 			}else if(tipo.equals("2")) {
 				Class.forName("org.sqlite.JDBC");
-				conexion = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\vlagu\\Desktop\\sqlite-tools-win32-x86-3330000"
-						+ "\\sqlite-tools-win32-x86-3330000\\sqlite-tools-win32-x86-3330000\\PRACTICA_1");
+				conexion = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mhl_1\\OneDrive\\Escritorio\\ACCESO A DATOS\\UT2 - MANEJO DE CONECTORES\\SGBD embebidos\\sqlite-tools-win32-x86-3330000\\PRACTICA3");
 				System.out.println("Conectado a SQLite.");
 			}
 		}catch(ClassNotFoundException e) {

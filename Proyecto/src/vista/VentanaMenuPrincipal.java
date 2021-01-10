@@ -45,7 +45,7 @@ public class VentanaMenuPrincipal extends  JFrame{
 		JButton BotonVentas = new JButton("Gestión Ventas");
 		BotonVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				coordinador_ventas.mostrarVentanaGestionVentas(args);
+				coordinador_ventas.mostrarVentanaGestionVentas();
 				setVisible(false);
 				
 			}
