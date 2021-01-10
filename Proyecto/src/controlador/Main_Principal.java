@@ -29,7 +29,7 @@ public class Main_Principal {
 	private Coordinador_Productos coordinador_productos;
 	private Producto_Logica miLogica_Producto;
 	private VentanaGestionProductos miVentanaGestionProductos;
-	//SUBSISTEMA CLIENTES:
+	//SUBSISTEMA VENTAS:
 	//FALTAN LAS DE VICTOR.
 	
 	
@@ -45,12 +45,14 @@ public class Main_Principal {
 		//y argumento dentro del rango permitido(1-2).
 		if(args.length!=0 && (args[0].equals("1")||args[0].equals("2"))) {
 			
+			String tipoConex = args[0]; //Guardamos argumento que define la conexión en un String.
+			
 			//Instanciamos clase común a todos los subsistemas.
 			miVentanaMenuPrincipal = new VentanaMenuPrincipal(args);
 
 			//Se instancian las clases de cada subsistema.
-			instarciarClasesClientes(args);
-			instarciarClasesProductos(args);
+			instarciarClasesClientes(tipoConex);
+			instarciarClasesProductos(tipoConex);
 			
 			//Se establecen las relaciones entre clases
 			establecerRelacionesClasesClientes();
@@ -74,8 +76,7 @@ public class Main_Principal {
 	/*
 	 * MÉTODOS SUBSISTEMA CLIENTES:
 	 */
-	private void instarciarClasesClientes(String[] args) {
-		String tipoConex = args[0]; //Guardamos argumento que define la conexión en un String. 
+	private void instarciarClasesClientes(String tipoConex) { 
 		miCoordinador_clientes= new Coordinador_Clientes();
 		miLogica_Cliente= new Cliente_Logica();	
 		
@@ -112,10 +113,10 @@ public class Main_Principal {
 	/*
 	 * MÉTODOS SUBSISTEMA PRODUCTOS:
 	 */
-	private void instarciarClasesProductos(String[] args) {
+	private void instarciarClasesProductos(String tipoConex) {
 		coordinador_productos= new Coordinador_Productos();
 		miLogica_Producto= new Producto_Logica();		
-		miVentanaGestionProductos= new VentanaGestionProductos(args);
+		miVentanaGestionProductos= new VentanaGestionProductos(tipoConex);
 	}
 	
 	private void establecerRelacionesClasesProductos() {

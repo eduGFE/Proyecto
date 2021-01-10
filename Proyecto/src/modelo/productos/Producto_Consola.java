@@ -45,7 +45,6 @@ public class Producto_Consola {
 			}
 		} while (opcion != 3);
 		System.out.println("Saliste");
-
 	}
 
 	// Crea objeto producto con la informacion necesario
@@ -94,8 +93,8 @@ public class Producto_Consola {
 		File Productos = new File("Productos");
 		String fecha1;
 		int contadorfichero = 1;
-		int ano = fecha.get(Calendar.YEAR);
-		int mes = fecha.get(Calendar.MONTH);
+		String ano = Integer.toString((fecha.get(Calendar.YEAR))).substring(2,4);
+		int mes = fecha.get(Calendar.MONTH)+1;
 		int dia = fecha.get(Calendar.DAY_OF_MONTH);
 		if (dia <= 9 && mes > 9) {
 			fecha1 = "PRODUCTOS0" + dia + mes + ano;
