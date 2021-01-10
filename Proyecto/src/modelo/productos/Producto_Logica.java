@@ -1,35 +1,38 @@
 package modelo.productos;
 
-import java.io.IOException;
-
-import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import vista.VentanaGestionProductos;
-import vista.VentanaMenuPrincipal;
+import controlador.Coordinador_Productos;
 
 //Clase que controlara que los datos introducidos son validos para la insercion en la BBDD
 public class Producto_Logica {
 
-	
-	public void importarabbdd(String tipoConex,JTable table2,int fila) throws Exception {
-		Producto_Dao producto = new Producto_Dao();
-		producto.importarabbdd(tipoConex,table2,fila);
+	private Coordinador_Productos miCoordinadorProductos;
+
+	//Enlace con Coordinador.
+	public void setCoordinadorProductos(Coordinador_Productos miCoordinadorProductos) {
+		this.miCoordinadorProductos = miCoordinadorProductos;
 	}
-	
-	public void consultarproductos(String tipoConex,DefaultTableModel model1) throws Exception {
+
+
+	public void importarabbdd(String[] args,JTable table2,int fila) throws Exception {
 		Producto_Dao producto = new Producto_Dao();
-		producto.consultarproductos(tipoConex, model1);
+		producto.importarabbdd(args,table2,fila);
 	}
-	public DefaultTableModel eliminarproducto(String tipoConex,int id,DefaultTableModel model1) throws Exception {
+
+	public void consultarproductos(String[] args,DefaultTableModel model1) throws Exception {
 		Producto_Dao producto = new Producto_Dao();
-		producto.eliminarproducto(tipoConex,id,model1);
+		producto.consultarproductos(args, model1);
+	}
+	public DefaultTableModel eliminarproducto(String[] args,int id,DefaultTableModel model1) throws Exception {
+		Producto_Dao producto = new Producto_Dao();
+		producto.eliminarproducto(args,id,model1);
 		return model1;
 	}
-	public DefaultTableModel consultarproductoporid(String tipoConex,int id,DefaultTableModel model1) throws Exception {
+	public DefaultTableModel consultarproductoporid(String[] args,int id,DefaultTableModel model1) throws Exception {
 		Producto_Dao producto = new Producto_Dao();
-		producto.consultarproductoporid(tipoConex,id,model1);
+		producto.consultarproductoporid(args,id,model1);
 		return model1;
 	}
 	

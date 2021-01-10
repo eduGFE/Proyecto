@@ -27,8 +27,6 @@ public class Cliente_Dao {
 		//ArrayList que contendrá objetos Cliente_Dto.
 		ArrayList<Cliente_Dto> listaClientesDTO = new ArrayList<Cliente_Dto>();
 		boolean existe=false;
-		
-		//  FUTURO -- PROPUESTA UNA SOLA CLASE CONEXION A LA QUE LE LLEGUE EL ARGUMENTO
 		 
 		//Creamos conexion con BD
 		Conexion conex= new Conexion(tipoConex);
@@ -66,9 +64,7 @@ public class Cliente_Dao {
 			return listaClientesDTO; //Devolvemos la lista de Clientes_Dto.	
 		} else { //Si no existe...		
 			return null; //Devolvemos null.				
-		}
-		
-		
+		}		
 	}
 
 	/**

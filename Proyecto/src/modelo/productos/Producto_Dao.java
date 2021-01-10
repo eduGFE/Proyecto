@@ -15,20 +15,18 @@ import javax.swing.table.DefaultTableModel;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Driver;
 
-import modelo.conexion.Conexion;
 import java.sql.*;
 
 //Clase que contendra las sentancias SQL necesarias para llevar la gestion de los productos
 public class Producto_Dao {
 	// Inserta objetos en la bbdd
-	public void importarabbdd(String tipoConex, JTable table2, int fila) throws Exception {
-		insertardatos(tipoConex, leerfichero(table2, fila));
+	public void importarabbdd(String[] args, JTable table2, int fila) throws Exception {
+		insertardatos(args, leerfichero(table2, fila));
 
 	}
 
 	// Metodo que se usa para leer los datos del fichero y meterlos en un objeto
 	// para posteriormente introduce ese objeto en un arraylis
-	////////////////////////////////////////////////////NO TOCAR///////////////////////////////////////////////////////////////////////////////
 	public static ArrayList<Producto_Dto> leerfichero(JTable table2, int fila) throws Exception {
 		ArrayList<Producto_Dto> Productos = new ArrayList<Producto_Dto>();
 		Productos.clear();
@@ -62,14 +60,16 @@ public class Producto_Dao {
 		}
 		return Productos;
 	}
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	// Inserta los datos del arraylist en la bbdd
-	public static boolean insertardatos(String tipoConex, ArrayList<Producto_Dto> Productos) {
+	public static boolean insertardatos(String[] args, ArrayList<Producto_Dto> Productos) {
 		PreparedStatement Sentencia = null;
 		boolean insertado = false;
-		Conexion conex= new Conexion(tipoConex);
 		try {
-				Sentencia = conex.getConexion().prepareStatement("INSERT INTO productos VALUES (?,?,?,?)");
+			int argumento = Integer.parseInt(args[0]);
+			if (argumento == 1) {
+				ConexionMySQL conexion = new ConexionMySQL();
+				Sentencia = conexion.getConnection().prepareStatement("INSERT INTO productos VALUES (?,?,?,?)");
 				for (int i = 0; i < Productos.size(); i++) {
 					Sentencia.setInt(1, 0);
 					Sentencia.setString(2, Productos.get(i).getDescripcion());
@@ -77,9 +77,22 @@ public class Producto_Dao {
 					Sentencia.setInt(4, Productos.get(i).getPvp());
 					Sentencia.executeUpdate();
 				}
+
 				Sentencia.close();
-				conex.desconectar();
-			
+				conexion.desconectar();
+			} else if (argumento == 2) {
+				ConexionSQLite3 conexion = new ConexionSQLite3();
+				Sentencia = conexion.getConnection().prepareStatement("INSERT INTO productos VALUES (?,?,?,?)");
+				for (int i = 0; i < Productos.size(); i++) {
+					Sentencia.setString(2, Productos.get(i).getDescripcion());
+					Sentencia.setInt(3, Productos.get(i).getStockanual());
+					Sentencia.setInt(4, Productos.get(i).getPvp());
+					Sentencia.executeUpdate();
+				}
+
+				Sentencia.close();
+				conexion.desconectar();
+			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -90,21 +103,35 @@ public class Producto_Dao {
 	}
 
 	// Sirve para consultar todos los productos que hay en la tabla productos
-	public DefaultTableModel consultarproductos(String tipoConex, DefaultTableModel model1) throws Exception {
+	public DefaultTableModel consultarproductos(String[] args, DefaultTableModel model1) throws Exception {
 		PreparedStatement Sentencia = null;
 		Object[] file = null;
 		model1.setRowCount(0);
-		Conexion conex= new Conexion(tipoConex);
 		try {
-				Sentencia = conex.getConexion().prepareStatement("SELECT * from productos");
+			int argumento = Integer.parseInt(args[0]);
+			if (argumento == 1) {
+				ConexionMySQL conexion = new ConexionMySQL();
+				Sentencia = conexion.getConnection().prepareStatement("SELECT * from productos");
 				ResultSet result = Sentencia.executeQuery();
 				while (result.next()) {
 					file = new Object[] { result.getInt("Id"), result.getString("descripcion"),
 							result.getDouble("stockanual"), result.getDouble("PVP") };
 					model1.addRow(file);
 				}
-				conex.desconectar();
+				conexion.desconectar();
 				Sentencia.close();
+			} else if (argumento == 2) {
+				ConexionSQLite3 conexion = new ConexionSQLite3();
+				Sentencia = conexion.getConnection().prepareStatement("SELECT * from productos");
+				ResultSet result = Sentencia.executeQuery();
+				while (result.next()) {
+					file = new Object[] { result.getInt("Id"), result.getString("descripcion"),
+							result.getDouble("stockanual"), result.getDouble("PVP") };
+					model1.addRow(file);
+				}
+				conexion.desconectar();
+				Sentencia.close();
+			}
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -114,21 +141,23 @@ public class Producto_Dao {
 	}
 
 	// Sirve para eliminar un producto por ID
-	public DefaultTableModel eliminarproducto(String tipoConex, int id, DefaultTableModel model1) throws Exception {
+	public DefaultTableModel eliminarproducto(String[] args, int id, DefaultTableModel model1) throws Exception {
 		PreparedStatement Sentencia = null;
 		boolean existe = false;
 		Object[] file = null;
 		model1.setRowCount(0);
-		Conexion conex= new Conexion(tipoConex);
 		try {
-				Sentencia = conex.getConexion().prepareStatement("SELECT * from productos where id=?");
+			int argumento = Integer.parseInt(args[0]);
+			if (argumento == 1) {
+				ConexionMySQL conexion = new ConexionMySQL();
+				Sentencia = conexion.getConnection().prepareStatement("SELECT * from productos where id=?");
 				Sentencia.setInt(1, id);
 				ResultSet result = Sentencia.executeQuery();
 				while (result.next()) {
 					existe = true;
 				}
 				if (existe == true) {
-					Sentencia = conex.getConexion().prepareStatement("DELETE from productos where id=?");
+					Sentencia = conexion.getConnection().prepareStatement("DELETE from productos where id=?");
 					Sentencia.setInt(1, id);
 					Sentencia.executeUpdate();
 					JOptionPane.showMessageDialog(null, "Producto borrado", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -139,9 +168,32 @@ public class Producto_Dao {
 					JOptionPane.showMessageDialog(null, "Producto no encontrado", "Información",
 							JOptionPane.INFORMATION_MESSAGE);
 				}
-				conex.desconectar();
+				conexion.desconectar();
 				Sentencia.close();
-		
+			} else if (argumento == 2) {
+				ConexionSQLite3 conexion = new ConexionSQLite3();
+				Sentencia = conexion.getConnection().prepareStatement("SELECT * from productos where id=?");
+				Sentencia.setInt(1, id);
+				ResultSet result = Sentencia.executeQuery();
+				while (result.next()) {
+					existe = true;
+				}
+				if (existe == true) {
+					Sentencia = conexion.getConnection().prepareStatement("DELETE from productos where id=?");
+					Sentencia.setInt(1, id);
+					Sentencia.executeUpdate();
+					JOptionPane.showMessageDialog(null, "Producto borrado", "Advertencia", JOptionPane.WARNING_MESSAGE);
+					file = new Object[] { result.getInt("Id"), result.getString("descripcion"),
+							result.getDouble("stockanual"), result.getDouble("PVP") };
+					model1.addRow(file);
+				} else {
+					JOptionPane.showMessageDialog(null, "Producto no encontrado", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+				conexion.desconectar();
+				Sentencia.close();
+			}
+
 		} catch (Exception e) {
 			
 		}
@@ -149,15 +201,16 @@ public class Producto_Dao {
 	}
 
 //Sirve para consultar un producto por ID
-	public DefaultTableModel consultarproductoporid(String tipoConex, int id, DefaultTableModel model1) throws Exception {
+	public DefaultTableModel consultarproductoporid(String[] args, int id, DefaultTableModel model1) throws Exception {
 		PreparedStatement Sentencia = null;
 		boolean existe = false;
 		Object[] file = null;
 		model1.setRowCount(0);
-		Conexion conex= new Conexion(tipoConex);
 		try {
-
-				Sentencia = conex.getConexion().prepareStatement("SELECT * from productos where id=?");
+			int argumento = Integer.parseInt(args[0]);
+			if (argumento == 1) {
+				ConexionMySQL conexion = new ConexionMySQL();
+				Sentencia = conexion.getConnection().prepareStatement("SELECT * from productos where id=?");
 				Sentencia.setInt(1, id);
 				ResultSet result = Sentencia.executeQuery();
 				while (result.next()) {
@@ -170,8 +223,26 @@ public class Producto_Dao {
 					JOptionPane.showMessageDialog(null, "Producto no encontrado", "Información",
 							JOptionPane.INFORMATION_MESSAGE);
 				}
-				conex.desconectar();
+				conexion.desconectar();
 				Sentencia.close();
+			} else if (argumento == 2) {
+				ConexionSQLite3 conexion = new ConexionSQLite3();
+				Sentencia = conexion.getConnection().prepareStatement("SELECT * from productos where id=?");
+				Sentencia.setInt(1, id);
+				ResultSet result = Sentencia.executeQuery();
+				while (result.next()) {
+					file = new Object[] { result.getInt("Id"), result.getString("descripcion"),
+							result.getDouble("stockanual"), result.getDouble("PVP") };
+					model1.addRow(file);
+					existe = true;
+				}
+				if (existe == false) {
+					JOptionPane.showMessageDialog(null, "Producto no encontrado", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+				conexion.desconectar();
+				Sentencia.close();
+			}
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

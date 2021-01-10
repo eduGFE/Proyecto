@@ -1,13 +1,12 @@
 package controlador;
 
-import java.io.IOException;
-
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import modelo.productos.Producto_Logica;
 import vista.VentanaGestionProductos;
 import vista.VentanaMenuPrincipal;
+
 //Clase de servira de union entre las distintas ventanas, ademas sera la encargada de que la informacion introducida en la ventana llegue a la clase logica
 //y de hay a la clase dao del objeto correspondiente 
 public class Coordinador_Productos {
@@ -17,33 +16,66 @@ public class Coordinador_Productos {
 	private VentanaGestionProductos miVentanaGestionProductos;
 
 
-	public VentanaGestionProductos mostrarVentanaGestionProductos(String tipoConex) {
-		miVentanaGestionProductos = new VentanaGestionProductos(tipoConex);
-		miVentanaGestionProductos.setVisible(true);
-		return miVentanaGestionProductos;
-	}
-
-	public void mostrarVentanaMenuPrincipal(String tipoConex) {
-		miVentanaMenuPrincipal = new VentanaMenuPrincipal(tipoConex);
-		miVentanaMenuPrincipal.setVisible(true);
-	}
+////////////////////- GETTERS -////////////////////
 	
-	public void importarabbdd(String tipoConex,JTable table2,int fila) throws Exception {
+public Producto_Logica getProducto_Logica() {
+return miProducto_Logica;
+}
+public VentanaMenuPrincipal getVentanaMenuPrincipal() {
+return miVentanaMenuPrincipal;
+}
+public VentanaGestionProductos getVentanaGestionProductos() {
+return miVentanaGestionProductos;
+}
+
+////////////////////- SETTERS -////////////////////
+
+public void setProducto_Logica(Producto_Logica miProducto_Logica) {
+this.miProducto_Logica = miProducto_Logica;
+}
+public void setVentanaMenuPrincipal(VentanaMenuPrincipal miVentanaMenuPrincipal) {
+this.miVentanaMenuPrincipal = miVentanaMenuPrincipal;
+}
+public void setVentanaGestionProductos(VentanaGestionProductos miVentanaGestionProductos) {
+this.miVentanaGestionProductos = miVentanaGestionProductos;
+}
+
+////////////////////- MOSTRAR VENTANAS -////////////////////
+
+public void mostrarVentanaMenuPrincipal() {
+miVentanaMenuPrincipal.setVisible(true);
+}
+public void mostrarVentanaGestionProductos() {
+miVentanaGestionProductos.setVisible(true);
+}
+
+////////////////////- OCULTAR VENTANAS -////////////////////
+
+public void ocultarVentanaMenuPrincipal() {
+miVentanaMenuPrincipal.setVisible(false);	
+}
+public void ocultarVentanaGestionProductos() {
+miVentanaGestionProductos.setVisible(false);	
+}
+
+////////////////////- MÉTODOS VALIDACIÓN LOGICA -////////////////////
+	
+	public void importarabbdd(String[] args,JTable table2,int fila) throws Exception {
 		miProducto_Logica =new Producto_Logica();
-		miProducto_Logica.importarabbdd(tipoConex,table2,fila);
+		miProducto_Logica.importarabbdd(args,table2,fila);
 	}
-	public void consultarproductos(String tipoConex,DefaultTableModel model1) throws Exception {
+	public void consultarproductos(String[] args,DefaultTableModel model1) throws Exception {
 		miProducto_Logica =new Producto_Logica();
-		miProducto_Logica.consultarproductos(tipoConex,model1);
+		miProducto_Logica.consultarproductos(args,model1);
 	}
-	public DefaultTableModel eliminarproducto(String tipoConex,int id,DefaultTableModel model1) throws Exception {
+	public DefaultTableModel eliminarproducto(String[] args,int id,DefaultTableModel model1) throws Exception {
 		miProducto_Logica =new Producto_Logica();
-		miProducto_Logica.eliminarproducto(tipoConex,id,model1);
+		miProducto_Logica.eliminarproducto(args,id,model1);
 		return model1;
 	}
-	public DefaultTableModel consultarproductoporid(String tipoConex,int id,DefaultTableModel model1) throws Exception {
+	public DefaultTableModel consultarproductoporid(String[] args,int id,DefaultTableModel model1) throws Exception {
 		miProducto_Logica =new Producto_Logica();
-		miProducto_Logica.consultarproductoporid(tipoConex,id,model1);
+		miProducto_Logica.consultarproductoporid(args,id,model1);
 		return model1;
 	}
 	

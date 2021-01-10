@@ -93,17 +93,17 @@ public class Coordinador_Clientes {
 
 	public void mostrarVentanaMenuPrincipal() {
 		//Limpiamos ventana. Pasamos por parámetro un array con todos los componentes del panel de la ventana.
-		inicializarComponentes(getVentanaInsertarClientes().getContentPane().getComponents());
+		inicializarComponentes(getVentanaMenuPrincipal().getContentPane().getComponents());
 		miVentanaMenuPrincipal.setVisible(true);
 	}
 	public void mostrarVentanaGestionClientes() {
 		//Limpiamos ventana. Pasamos por parámetro un array con todos los componentes del panel de la ventana.
-		inicializarComponentes(getVentanaInsertarClientes().getContentPane().getComponents());
+		inicializarComponentes(getVentanaGestionClientes().getContentPane().getComponents());
 		miVentanaGestionClientes.setVisible(true);
 	}
 	public void mostrarVentanaImportarClientes() {
 		//Limpiamos ventana. Pasamos por parámetro un array con todos los componentes del panel de la ventana.
-		inicializarComponentes(getVentanaInsertarClientes().getContentPane().getComponents());
+		inicializarComponentes(getVentanaImportarClientes().getContentPane().getComponents());
 		miVentanaImportarClientes.setVisible(true);
 	}
 	public void mostrarVentanaInsertarClientes() {
@@ -113,17 +113,17 @@ public class Coordinador_Clientes {
 	}
 	public void mostrarVentanaModificarClientes() {
 		//Limpiamos ventana. Pasamos por parámetro un array con todos los componentes del panel de la ventana.
-		inicializarComponentes(getVentanaInsertarClientes().getContentPane().getComponents());
+		inicializarComponentes(getVentanaModificarClientes().getContentPane().getComponents());
 		miVentanaModificarClientes.setVisible(true);
 	}
 	public void mostrarVentanaBorrarClientes() {
 		//Limpiamos ventana. Pasamos por parámetro un array con todos los componentes del panel de la ventana.
-		inicializarComponentes(getVentanaInsertarClientes().getContentPane().getComponents());
+		inicializarComponentes(getVentanaBorrarClientes().getContentPane().getComponents());
 		miVentanaBorrarClientes.setVisible(true);
 	}
 	public void mostrarVentanaConsultarClientes() {
 		//Limpiamos ventana. Pasamos por parámetro un array con todos los componentes del panel de la ventana.
-		inicializarComponentes(getVentanaInsertarClientes().getContentPane().getComponents());
+		inicializarComponentes(getVentanaConsultarClientes().getContentPane().getComponents());
 		miVentanaConsultarClientes.setVisible(true);
 	}
 
