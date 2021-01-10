@@ -7,13 +7,10 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-<<<<<<< HEAD
+
 import modelo.conexion.Conexion;
-=======
-import modelo.conexion.Conexion1;
-import modelo.conexion.ConexionMySQL;
-import modelo.conexion.ConexionSQLite3;
->>>>>>> feature/RamaEduardo
+
+
 import vista.VentanaInsertarClientes;
 
 /**
@@ -33,14 +30,13 @@ public class Cliente_Dao {
 		//ArrayList que contendrá objetos Cliente_Dto.
 		ArrayList<Cliente_Dto> listaClientesDTO = new ArrayList<Cliente_Dto>();
 		boolean existe=false;
-<<<<<<< HEAD
-=======
+
 		
 		//  FUTURO -- PROPUESTA UNA SOLA CLASE CONEXION A LA QUE LE LLEGUE EL ARGUMENTO
->>>>>>> feature/RamaEduardo
+
 		 
 		//Creamos conexion con BD
-		Conexion1 conex= new Conexion1(tipoConex);
+		Conexion conex= new Conexion(tipoConex);
 	
 		try {
 			//Creamos sentencia a ejecutar.
@@ -75,21 +71,21 @@ public class Cliente_Dao {
 			return listaClientesDTO; //Devolvemos la lista de Clientes_Dto.	
 		} else { //Si no existe...		
 			return null; //Devolvemos null.				
-<<<<<<< HEAD
+
 		}		
-=======
+
 		}
 		
 		
->>>>>>> feature/RamaEduardo
-	}
+
+	
 
 	/**
 	 * Método que inserta un Cliente(recibido por parámetro) en la BD.
 	 */
 	public void insertarCliente(Cliente_Dto miClienteDTO, String tipoConex) {
 		//Creamos conexion con BD
-		Conexion1 conex= new Conexion1(tipoConex);
+		Conexion conex= new Conexion(tipoConex);
 
 		try {
 			//Creamos sentencia a ejecutar.
@@ -125,7 +121,7 @@ public class Cliente_Dao {
 	 */
 	public ArrayList<Cliente_Dto> consultarTodosClientes(String tipoConex) {
 		//Creamos conexion con BD
-		Conexion1 conex= new Conexion1(tipoConex);
+		Conexion conex= new Conexion(tipoConex);
 		//ArrayList que contendrá objetos Cliente_Dto.
 		ArrayList<Cliente_Dto> listaClientesDTO = new ArrayList<Cliente_Dto>(); 
 		boolean existen=false;
@@ -171,7 +167,7 @@ public class Cliente_Dao {
 	 */
 	public void actualizarCliente(int idClienteSelect, String newDireccion, String newPoblacion, String newTelefono, String tipoConex) {
 		//Creamos conexion con BD
-		Conexion1 conex= new Conexion1(tipoConex);
+		Conexion conex= new Conexion(tipoConex);
 
 		try {
 			//Creamos sentencia a ejecutar.
@@ -203,7 +199,7 @@ public class Cliente_Dao {
 	 */
 	public void eliminarCliente(String nif, String tipoConex) {
 		//Creamos conexion con BD
-		Conexion1 conex= new Conexion1(tipoConex);
+		Conexion conex= new Conexion(tipoConex);
 
 		try {
 			//Creamos sentencia a ejecutar.
