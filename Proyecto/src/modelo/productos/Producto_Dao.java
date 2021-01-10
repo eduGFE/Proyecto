@@ -5,19 +5,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
-import java.sql.DriverManager;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.Driver;
-
-import modelo.conexion.Conexion1;
-import modelo.conexion.ConexionMySQL;
-import modelo.conexion.ConexionSQLite3;
+import modelo.conexion.Conexion;
 
 import java.sql.*;
 
@@ -42,7 +36,7 @@ public class Producto_Dao {
 		double pvp;
 		if (fila != -1) {
 			nombrearchivo = table2.getModel().getValueAt(fila, 0).toString();
-			File fichero = new File("C:\\Users\\Javie\\Proyecto_AD\\Proyecto\\Proyecto\\Productos\\" + nombrearchivo);
+			File fichero = new File("Productos\\" + nombrearchivo);
 			ObjectInputStream dataIS = new ObjectInputStream(new FileInputStream(fichero));
 			try {
 				while (true) {
@@ -70,7 +64,7 @@ public class Producto_Dao {
 	public static boolean insertardatos(String tipoConex, ArrayList<Producto_Dto> Productos) {
 		PreparedStatement Sentencia = null;
 		boolean insertado = false;
-		Conexion1 conex= new Conexion1(tipoConex);
+		Conexion conex= new Conexion(tipoConex);
 		try {
 				Sentencia = conex.getConexion().prepareStatement("INSERT INTO productos VALUES (?,?,?,?)");
 				for (int i = 0; i < Productos.size(); i++) {
@@ -97,7 +91,7 @@ public class Producto_Dao {
 		PreparedStatement Sentencia = null;
 		Object[] file = null;
 		model1.setRowCount(0);
-		Conexion1 conex= new Conexion1(tipoConex);
+		Conexion conex= new Conexion(tipoConex);
 		try {
 				Sentencia = conex.getConexion().prepareStatement("SELECT * from productos");
 				ResultSet result = Sentencia.executeQuery();
@@ -122,7 +116,7 @@ public class Producto_Dao {
 		boolean existe = false;
 		Object[] file = null;
 		model1.setRowCount(0);
-		Conexion1 conex= new Conexion1(tipoConex);
+		Conexion conex= new Conexion(tipoConex);
 		try {
 				Sentencia = conex.getConexion().prepareStatement("SELECT * from productos where id=?");
 				Sentencia.setInt(1, id);
@@ -157,7 +151,7 @@ public class Producto_Dao {
 		boolean existe = false;
 		Object[] file = null;
 		model1.setRowCount(0);
-		Conexion1 conex= new Conexion1(tipoConex);
+		Conexion conex= new Conexion(tipoConex);
 		try {
 
 				Sentencia = conex.getConexion().prepareStatement("SELECT * from productos where id=?");

@@ -32,24 +32,7 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 	private JTable table2;
 	private DefaultTableModel model2 = new DefaultTableModel();
 
-
-	public VentanaGestionProductos(String[] args) {
-
-	public static void main(String tipoConex) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaGestionProductos window = new VentanaGestionProductos(tipoConex);
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	public VentanaGestionProductos(String tipoConex) {
-
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
@@ -90,11 +73,7 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 		JButton botonVolver = new JButton("Volver");
 		botonVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				coordinador_productos.mostrarVentanaMenuPrincipal();
-
-				coordinador_productos.mostrarVentanaMenuPrincipal(tipoConex);
-
 				setVisible(false);
 			}
 		});
@@ -220,14 +199,12 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 	    }
 //Hilo que muestra la informacion del directio Productos nada mas se muestra la ventana
 	public void run() {
-		File directorio = new File("C:\\Users\\Javie\\Proyecto_AD\\Proyecto\\Proyecto\\Productos");
+		File directorio = new File("Productos");
 		String[] lista = directorio.list();
 		Object[] file = null;
 		for (int i = 0; i < lista.length; i++) {
 			file = new Object[] { lista[i] };
 			model2.addRow(file);
 		}
-
 	}
 }
- }

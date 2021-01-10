@@ -16,62 +16,50 @@ public class Coordinador_Productos {
 	private VentanaGestionProductos miVentanaGestionProductos;
 
 
-////////////////////- GETTERS -////////////////////
-	
-public Producto_Logica getProducto_Logica() {
-return miProducto_Logica;
-}
-public VentanaMenuPrincipal getVentanaMenuPrincipal() {
-return miVentanaMenuPrincipal;
-}
-public VentanaGestionProductos getVentanaGestionProductos() {
-return miVentanaGestionProductos;
-}
+	////////////////////- GETTERS -////////////////////
 
-////////////////////- SETTERS -////////////////////
-
-public void setProducto_Logica(Producto_Logica miProducto_Logica) {
-this.miProducto_Logica = miProducto_Logica;
-}
-public void setVentanaMenuPrincipal(VentanaMenuPrincipal miVentanaMenuPrincipal) {
-this.miVentanaMenuPrincipal = miVentanaMenuPrincipal;
-}
-public void setVentanaGestionProductos(VentanaGestionProductos miVentanaGestionProductos) {
-this.miVentanaGestionProductos = miVentanaGestionProductos;
-}
-
-////////////////////- MOSTRAR VENTANAS -////////////////////
-
-public void mostrarVentanaMenuPrincipal() {
-miVentanaMenuPrincipal.setVisible(true);
-}
-public void mostrarVentanaGestionProductos() {
-miVentanaGestionProductos.setVisible(true);
-}
-
-////////////////////- OCULTAR VENTANAS -////////////////////
-
-public void ocultarVentanaMenuPrincipal() {
-miVentanaMenuPrincipal.setVisible(false);	
-}
-public void ocultarVentanaGestionProductos() {
-miVentanaGestionProductos.setVisible(false);	
-}
-
-////////////////////- MÉTODOS VALIDACIÓN LOGICA -////////////////////
-
-	public VentanaGestionProductos mostrarVentanaGestionProductos(String tipoConex) {
-		miVentanaGestionProductos = new VentanaGestionProductos(tipoConex);
-		miVentanaGestionProductos.setVisible(true);
+	public Producto_Logica getProducto_Logica() {
+		return miProducto_Logica;
+	}
+	public VentanaMenuPrincipal getVentanaMenuPrincipal() {
+		return miVentanaMenuPrincipal;
+	}
+	public VentanaGestionProductos getVentanaGestionProductos() {
 		return miVentanaGestionProductos;
 	}
 
-	public void mostrarVentanaMenuPrincipal(String tipoConex) {
-		miVentanaMenuPrincipal = new VentanaMenuPrincipal(tipoConex);
-		miVentanaMenuPrincipal.setVisible(true);
+	////////////////////- SETTERS -////////////////////
+
+	public void setProducto_Logica(Producto_Logica miProducto_Logica) {
+		this.miProducto_Logica = miProducto_Logica;
+	}
+	public void setVentanaMenuPrincipal(VentanaMenuPrincipal miVentanaMenuPrincipal) {
+		this.miVentanaMenuPrincipal = miVentanaMenuPrincipal;
+	}
+	public void setVentanaGestionProductos(VentanaGestionProductos miVentanaGestionProductos) {
+		this.miVentanaGestionProductos = miVentanaGestionProductos;
 	}
 
-	
+	////////////////////- MOSTRAR VENTANAS -////////////////////
+
+	public void mostrarVentanaMenuPrincipal() {
+		miVentanaMenuPrincipal.setVisible(true);
+	}
+	public void mostrarVentanaGestionProductos() {
+		miVentanaGestionProductos.setVisible(true);
+	}
+
+	////////////////////- OCULTAR VENTANAS -////////////////////
+
+	public void ocultarVentanaMenuPrincipal() {
+		miVentanaMenuPrincipal.setVisible(false);	
+	}
+	public void ocultarVentanaGestionProductos() {
+		miVentanaGestionProductos.setVisible(false);	
+	}
+
+	////////////////////- MÉTODOS VALIDACIÓN LOGICA -////////////////////
+
 	public void importarabbdd(String tipoConex,JTable table2,int fila) throws Exception {
 		miProducto_Logica =new Producto_Logica();
 		miProducto_Logica.importarabbdd(tipoConex,table2,fila);
@@ -90,9 +78,9 @@ miVentanaGestionProductos.setVisible(false);
 		miProducto_Logica.consultarproductoporid(tipoConex,id,model1);
 		return model1;
 	}
-	
-	
-	
+
+
+
 
 }
 
