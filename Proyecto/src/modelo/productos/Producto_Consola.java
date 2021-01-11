@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 import controlador.Main_Principal;
 
@@ -60,9 +61,20 @@ public class Producto_Consola {
 		System.out.println("Inserta la descripción del producto");
 		descripcion = entrada.nextLine();
 		while (esnumero(descripcion) == true) {
+			
+			System.out.println("Introduce una descripcion valida");
+			descripcion = entrada.nextLine();
+			
+		}
+		while(descripcion.isEmpty()) {
 			System.out.println("Introduce una descripcion valida");
 			descripcion = entrada.nextLine();
 		}
+		while(letra(descripcion)==false) {
+			System.out.println("Introduce una descripcion valida");
+			descripcion = entrada.nextLine();
+		}
+		
 		System.out.println("Introduce el stock anual");
 		try {
 			stockanual = entrada.nextInt();
@@ -138,10 +150,21 @@ public class Producto_Consola {
 		try {
 			Integer.parseInt(cadena);
 			resultado = true;
+			
 		} catch (NumberFormatException excepcion) {
 			resultado = false;
 		}
 
 		return resultado;
+	}
+	public static boolean letra(String cadena) {
+
+		for (int i = 0; i < cadena.length(); i++) {
+			char caracter = cadena.toUpperCase().charAt(i);
+			int ascii = (int) caracter;
+			if (ascii != 165 && (ascii < 65 || ascii > 90))
+				return false;
+		}
+		return true;
 	}
 }

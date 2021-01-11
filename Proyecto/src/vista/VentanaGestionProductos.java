@@ -26,11 +26,12 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 	// la ventana de inicio
 	private Coordinador_Productos coordinador_productos;
 	private JFrame frame;
-	//tablas
+	// tablas
 	private JTable table1;
 	private DefaultTableModel model1 = new DefaultTableModel();
 	private JTable table2;
 	private DefaultTableModel model2 = new DefaultTableModel();
+	Thread mihilo = new Thread(this);
 
 	public VentanaGestionProductos(String tipoConex) {
 		try {
@@ -43,22 +44,24 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 		} catch (Exception e) {
 
 		}
+
 		initialize(tipoConex);
 	}
 
 	public void initialize(String tipoConex) {
+
 		table1 = new JTable();
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(10, 42, 444, 171);
 		getContentPane().add(scrollPane_1);
-		//Tabla con la informacion de la bbdd
+		// Tabla con la informacion de la bbdd
 		scrollPane_1.setViewportView(table1);
 		model1.addColumn("Id");
 		model1.addColumn("Descripción");
 		model1.addColumn("Stock Anual");
 		model1.addColumn("Pvp");
 		table1.setModel(model1);
-		//tabla para motar la informacion del directorio productos
+		// tabla para motar la informacion del directorio productos
 		table2 = new JTable();
 		JScrollPane scrollPane_2 = new JScrollPane();
 		scrollPane_2.setBounds(464, 42, 231, 171);
@@ -69,17 +72,19 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 		setBounds(100, 100, 711, 289);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
-		//Boton para volver al menu principal
+		// Boton para volver al menu principal
 		JButton botonVolver = new JButton("Volver");
 		botonVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				coordinador_productos.mostrarVentanaMenuPrincipal();
+				model2.setRowCount(0);
 				setVisible(false);
+
 			}
 		});
 		botonVolver.setBounds(10, 224, 89, 23);
 		getContentPane().add(botonVolver);
-		//Boton para mandar la informacion desde el fichero a la bbdd
+		// Boton para mandar la informacion desde el fichero a la bbdd
 		JButton botonImportar = new JButton("Importar");
 		botonImportar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -93,14 +98,14 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 
 			}
 		});
-		botonImportar.setBounds(606, 11, 89, 23);
+		botonImportar.setBounds(591, 11, 104, 23);
 		getContentPane().add(botonImportar);
 		JButton EliminarporId = new JButton("Eliminar producto por ID");
 		EliminarporId.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String id = "";
-				//Bloque que codigo que sirve para que la aplicacion no deje de funcionar
-				//Por dejar algun campo vacio o por si se a introducido informacion no valida
+				// Bloque que codigo que sirve para que la aplicacion no deje de funcionar
+				// Por dejar algun campo vacio o por si se a introducido informacion no valida
 				id = JOptionPane.showInputDialog("Inserte el ID del producto que quiera eliminar");
 				try {
 					if (id == null) {
@@ -108,7 +113,7 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 						if (esnumero(id) == false) {
 							JOptionPane.showMessageDialog(null, "Inserte un ID valido", "Información",
 									JOptionPane.INFORMATION_MESSAGE);
-						}else {
+						} else {
 							if (!id.equals("")) {
 								coordinador_productos.eliminarproducto(tipoConex, Integer.valueOf(id), model1);
 							}
@@ -130,8 +135,8 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 		consultarporid.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String id = "";
-				//Bloque que codigo que sirve para que la aplicacion no deje de funcionar
-				//Por dejar algun campo vacio o por si se a introducido informacion no valida
+				// Bloque que codigo que sirve para que la aplicacion no deje de funcionar
+				// Por dejar algun campo vacio o por si se a introducido informacion no valida
 				id = JOptionPane.showInputDialog("Inserte el ID del producto que quiera consultar");
 				try {
 					if (id == null) {
@@ -139,8 +144,7 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 						if (esnumero(id) == false) {
 							JOptionPane.showMessageDialog(null, "Inserte un ID valido", "Información",
 									JOptionPane.INFORMATION_MESSAGE);
-						}
-						 else {
+						} else {
 							if (!id.equals("")) {
 								coordinador_productos.consultarproductoporid(tipoConex, Integer.valueOf(id), model1);
 							}
@@ -174,36 +178,53 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 		});
 		btnNewButton_4.setBounds(109, 224, 219, 23);
 		getContentPane().add(btnNewButton_4);
+
+		JButton btnNewButton = new JButton("Mostrar ficheros");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				mihilo.run();
+			}
+		});
+		btnNewButton.setBounds(464, 11, 117, 23);
+		getContentPane().add(btnNewButton);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setVisible(false);
-		Thread mihilo = new Thread(this);
 		mihilo.start();
+		mihilo.suspend();
+
 	}
+
 	public void setCoordinadorProductos(Coordinador_Productos coordinador_productos) {
 		this.coordinador_productos = coordinador_productos;
 	}
-	//Comprueba si un numero es numeros o se a introducido alguna letra u otro caracter
-	 public static boolean esnumero(String cadena) {
 
-	        boolean resultado;
+	// Comprueba si un numero es numeros o se a introducido alguna letra u otro
+	// caracter
+	public static boolean esnumero(String cadena) {
 
-	        try {
-	            Integer.parseInt(cadena);
-	            resultado = true;
-	        } catch (NumberFormatException excepcion) {
-	            resultado = false;
-	        }
+		boolean resultado;
 
-	        return resultado;
-	    }
+		try {
+			Integer.parseInt(cadena);
+			resultado = true;
+		} catch (NumberFormatException excepcion) {
+			resultado = false;
+		}
+
+		return resultado;
+	}
+
 //Hilo que muestra la informacion del directio Productos nada mas se muestra la ventana
 	public void run() {
 		File directorio = new File("Productos");
 		String[] lista = directorio.list();
 		Object[] file = null;
+		model2.setRowCount(0);
 		for (int i = 0; i < lista.length; i++) {
 			file = new Object[] { lista[i] };
+		
 			model2.addRow(file);
 		}
 	}
