@@ -65,7 +65,9 @@ public class Cliente_Dao {
 
 		} catch (SQLException e) {
 			mostrarMensajeError("Error! No se pudieron obtener datos !");
-		}	
+		}  catch (Exception e) {
+			mostrarMensajeError("Error! No se pudieron obtener datos !");
+		}
 
 		if (existe) { //Si existe algún cliente...		
 			return listaClientesDTO; //Devolvemos la lista de Clientes_Dto.	
@@ -110,8 +112,9 @@ public class Cliente_Dao {
 			//Capturamos excepciones.		
 		} catch (SQLException e) {
 			mostrarMensajeError("Error! No se pudo realizar la inserción !");
-			System.out.println(e);
-		}	
+		} catch (Exception e) {
+			mostrarMensajeError("Error! No se pudo realizar la inserción !");
+		}
 	}
 
 	/**
@@ -152,7 +155,9 @@ public class Cliente_Dao {
 			
 		} catch (SQLException e) {
 			mostrarMensajeError("Error! No se pudieron obtener datos !");
-		}	
+		} catch (Exception e) {
+			mostrarMensajeError("Error! No se pudieron obtener datos !");
+		}		
 		
 		if (existen) { //Si existe algún cliente...		
 			return listaClientesDTO; //Devolvemos la lista de Clientes_Dto.	
@@ -189,8 +194,9 @@ public class Cliente_Dao {
 			//Capturamos excepciones.		
 		} catch (SQLException e) {
 			mostrarMensajeError("Error! No se pudo realizar la actualización !");
-			e.printStackTrace();
-		}	
+		} catch (Exception e) {
+			mostrarMensajeError("Error! No se pudo realizar la actualización !");
+		}		
 	}
 
 	/**
@@ -216,8 +222,9 @@ public class Cliente_Dao {
 			//Capturamos excepciones.		
 		} catch (SQLException e) {
 			mostrarMensajeError("Error! No se pudo realizar la eliminación !");
-			System.out.println(e);
-		}	
+		} catch (Exception e) {
+			mostrarMensajeError("Error! No se pudo realizar la eliminación !");
+		}		
 	}
 	
 ////////////////////- MÉTODOS PRIVADOS -////////////////////

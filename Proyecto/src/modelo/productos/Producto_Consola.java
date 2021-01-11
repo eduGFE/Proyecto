@@ -167,4 +167,8 @@ public class Producto_Consola {
 		}
 		return true;
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 64f4a463ae9949bdb148add857ad4b74382e4552

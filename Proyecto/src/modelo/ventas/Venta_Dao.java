@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -69,7 +71,7 @@ public class Venta_Dao{
 				borrarVenta.executeUpdate();
 				seHaBorrado=true;
 			}catch(SQLException e) {
-				System.out.println("Error al conectar con la base de datos (Al intentar borrar una venta por ID)");
+				JOptionPane.showMessageDialog(null, "No se puede conectar a la base de datos");
 			}
 		}else{
 			JOptionPane.showMessageDialog(null, "La id de venta no existe en la base de datos");
@@ -95,7 +97,7 @@ public class Venta_Dao{
 			conex.desconectar();
 			seBorra = true;
 		}
-			return seBorra;
+		return seBorra;
 	}
 
 	public ArrayList<Venta_Dto> mostrarVentasPorNIF(String nifCliente, String tipoConexion) {
@@ -119,22 +121,54 @@ public class Venta_Dao{
 		} catch (SQLException e) {
 			System.out.println("No se ha podido conectar con la base de datos (Error al intentar borrar venta por NIF)");
 		}
-		
+
 		return listadoVentas;
 	}
 
-	public Venta_Dto[] mostrarVentasPorFecha(Calendar fechaMin, Calendar fechaMax, String tipoConexion){          //PENDIENTE
-		
-		
-		
-		
-		return null;
+	public ArrayList<Venta_Dto> mostrarVentasPorFecha(String fechaMinima, String fechaMaxima, String tipoConexion){          
+	
+		ArrayList<Venta_Dto> listadoVentas = new ArrayList<Venta_Dto>();
+		Conexion conex = new Conexion(tipoConexion);
+		SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+		ResultSet resultado;
+		String muestraVentasPorFecha = "SELECT * FROM ventas WHERE fechaventa BETWEEN ? AND ?";
+		try {
+			java.util.Date fechaMinimaUtil = formatoFecha.parse(fechaMinima);
+			java.sql.Date fechaMinimaSQL = new java.sql.Date(fechaMinimaUtil.getTime());
+
+			java.util.Date fechaMaximaUtil = formatoFecha.parse(fechaMaxima);
+			java.sql.Date fechaMaximaSQL = new java.sql.Date(fechaMaximaUtil.getTime());
+
+			PreparedStatement sentenciaMuestraVentasPorFecha = conex.getConexion().prepareStatement(muestraVentasPorFecha);
+			sentenciaMuestraVentasPorFecha.setDate(1, fechaMinimaSQL);
+			sentenciaMuestraVentasPorFecha.setDate(2, fechaMaximaSQL);
+			resultado = sentenciaMuestraVentasPorFecha.executeQuery();
+			while(resultado.next()) {
+				Venta_Dto venta = new Venta_Dto();
+				venta.setIdVenta(resultado.getInt(1));
+				venta.setFechaVenta(resultado.getDate(2));
+				venta.setIdCliente(resultado.getInt(3));
+				venta.setIdProducto(resultado.getInt(4));
+				venta.setCantidad(resultado.getInt(5));
+				listadoVentas.add(venta);
+			}
+		} catch (ParseException e1) {
+			System.out.println("Error al parsear");
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "No se ha podido conectar a la base de datos");
+		}
+
+		return listadoVentas;
 	}
-/*
+	
+	
+	
+	
+	/*
 	public boolean exportarXMLporFechas(Date fechaMin, Date fechaMax, String tipoConexion) {					//PENDIENTE
-		
+
 	}
-*/
+	 
 	public boolean exportarXMLporCliente(String nifCliente, String tipoConexion) {								//PENDIENTE
 		boolean seExporta=false;
 		Conexion conex = new Conexion(tipoConexion);
@@ -142,10 +176,11 @@ public class Venta_Dao{
 		String dia = Integer.toString(fechaActual.get(Calendar.DATE));
 		String mes = Integer.toString(fechaActual.get(Calendar.MONTH));
 		String ano = Integer.toString(fechaActual.get(Calendar.YEAR));
-		
+
 		return seExporta;
 	}
-	
+	*/
+
 	public boolean exportarCSVporCliente(String nifCliente, String tipoConexion){
 		boolean seExporta= false;
 		Conexion conex = new Conexion(tipoConexion);
@@ -164,7 +199,7 @@ public class Venta_Dao{
 			consultarVentasPorNif.setString(1, nifCliente);
 			//En resultado se almacena el resultset con todas las ventas del cliente
 			resultado = consultarVentasPorNif.executeQuery();
-			
+
 		} catch (SQLException e) {
 			System.out.println("No se ha podido conectar con la base de datos (Error al intentar importar venta por NIF/CSV)");
 		}
@@ -188,20 +223,64 @@ public class Venta_Dao{
 		} catch (IOException e) {
 			System.out.println("Error de acceso al fichero");
 		}
-		
+
 		return seExporta;
 	}
 
-	public boolean exportarCSVporFechas(String tipoConexion) {					//PENDIENTE
+	public boolean exportarCSVporFechas(String fechaMinima, String fechaMaxima, String tipoConexion) {					
+		boolean seExporta;
+		Conexion conex = new Conexion(tipoConexion);
+		SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+		ResultSet resultado=null;
+		String muestraVentasPorFecha = "SELECT * FROM ventas WHERE fechaventa BETWEEN ? AND ?";
+		Calendar fechaActual = new GregorianCalendar();
+		String dia = Integer.toString(fechaActual.get(Calendar.DATE));
+		String mes = Integer.toString(fechaActual.get(Calendar.MONTH));
+		String ano = Integer.toString(fechaActual.get(Calendar.YEAR));
+		int cont = 1;
+		String contadorDiario="0"+cont;
+		String nombreFichero = "VENTAS"+dia+mes+ano+contadorDiario;
+		String consultaVentas = "SELECT * FROM ventas WHERE idcliente = (SELECT id FROM clientes WHERE NIF = ?)";
+		try {
+			PreparedStatement consultarVentasPorFecha = conex.getConexion().prepareStatement(muestraVentasPorFecha);
+			java.util.Date fechaMinimaUtil = formatoFecha.parse(fechaMinima);
+			java.sql.Date fechaMinimaSQL = new java.sql.Date(fechaMinimaUtil.getTime());
+
+			java.util.Date fechaMaximaUtil = formatoFecha.parse(fechaMaxima);
+			java.sql.Date fechaMaximaSQL = new java.sql.Date(fechaMaximaUtil.getTime());
+			
+			consultarVentasPorFecha.setDate(1, fechaMinimaSQL);
+			consultarVentasPorFecha.setDate(2, fechaMaximaSQL);
+			resultado = consultarVentasPorFecha.executeQuery();
+			
+			File ficheroCSV = new File(nombreFichero+".csv");
+			FileWriter flujoEscritura = new FileWriter(ficheroCSV);
+			BufferedWriter flujoEscrituraBuffer = new BufferedWriter(flujoEscritura);
+			while(resultado.next()){
+				flujoEscrituraBuffer.write(resultado.getInt(1)+";");
+				flujoEscrituraBuffer.write(String.valueOf(resultado.getDate(2))+";");
+				flujoEscrituraBuffer.write(String.valueOf(resultado.getInt(3))+";");
+				flujoEscrituraBuffer.write(String.valueOf(resultado.getInt(4))+";");
+				flujoEscrituraBuffer.write(String.valueOf(resultado.getInt(5)));
+				flujoEscrituraBuffer.newLine();
+			}
+			flujoEscrituraBuffer.close();
+			seExporta=true;
+			
+		} catch (SQLException e) {
+			System.out.println("Error al conectar con la base de datos");
+		} catch (ParseException e) {
+			System.out.println("Error al parsear");
+		} catch (IOException e) {
+			System.out.println("Error al crear ficharo");
+			e.printStackTrace();
+		}
+		
+		
 
 		return false;
 	}
-	
-	public boolean exportarXML() {
-		boolean seImporta=true;
-		return seImporta;
-	}
-	
+
 	//auxiliares
 	private static Boolean existeIDCliente(int idCliente, String tipoConexion){
 		boolean existeID=false;
