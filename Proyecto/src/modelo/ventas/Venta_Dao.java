@@ -310,7 +310,7 @@ public class Venta_Dao{
 		Conexion conex = new Conexion(tipoConexion);
 		boolean existeID=false;
 		//1º declaro string con la consulta
-		String consultaMuestraProductos= "SELECT id FROM CLIENTES";
+		String consultaMuestraProductos= "SELECT id FROM productos";
 		try {
 			Statement muestraProductos = conex.getConexion().createStatement();
 			ResultSet resultSetProductos = muestraProductos.executeQuery(consultaMuestraProductos);
