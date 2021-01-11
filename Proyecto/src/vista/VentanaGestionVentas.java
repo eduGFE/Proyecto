@@ -112,10 +112,35 @@ public class VentanaGestionVentas extends  JFrame {
 
 				//Si el comboBox marca intervalo de fechas:
 				if(comboBoxMostrar.getSelectedIndex()==0){
-					Date fechaMin;
-					Date fechaMax;
-					
-					
+					String fechaMin;
+					String fechaMax;
+					fechaMin = JOptionPane.showInputDialog("Introduce la fecha de inicio. El formato debe ser: YYYY-MM-DD");
+					fechaMax = JOptionPane.showInputDialog("Introduce la fecha de fin. El formato debe ser: YYYY-MM-DD\"");
+					ArrayList<Venta_Dto> listadoMostrar = coordinador_ventas.mostrarVentasPorFecha(fechaMin, fechaMax, tipoConexion);
+					if(listadoMostrar != null) {
+						if(listadoMostrar.isEmpty()){
+							JOptionPane.showMessageDialog(null, "No se  han encontrado ventas en ese rango de fechas");
+						}else{
+							for(int i = 0; i<listadoMostrar.size();i++){
+								Venta_Dto ventaAux = new Venta_Dto();
+								ventaAux.setIdVenta(listadoMostrar.get(i).getIdVenta());
+								ventaAux.setFechaVenta(listadoMostrar.get(i).getFechaVenta());
+								ventaAux.setIdCliente(listadoMostrar.get(i).getIdCliente());
+								ventaAux.setIdProducto(listadoMostrar.get(i).getIdProducto());
+								ventaAux.setCantidad(listadoMostrar.get(i).getCantidad());
+								Object[] registroVenta ={
+										ventaAux.getIdVenta(),
+										ventaAux.getFechaVenta(),
+										ventaAux.getIdCliente(),
+										ventaAux.getIdProducto(),
+										ventaAux.getCantidad()
+								};
+
+								modeloTablaVentas.addRow(registroVenta);
+							}
+						}
+					}
+
 
 
 					//Si el comboBox marca busqueda por NIF
@@ -124,28 +149,29 @@ public class VentanaGestionVentas extends  JFrame {
 					ArrayList<Venta_Dto> listadoMostrar;
 					nifCliente = JOptionPane.showInputDialog("Introduce el NIF del cliente a consultar");
 					listadoMostrar = coordinador_ventas.mostrarVentasPorNIF(nifCliente, tipoConexion);
-					if(listadoMostrar.isEmpty()) {
-						JOptionPane.showMessageDialog(null, "El cliente no ha realizado ninguna compra");
-					}else {
-						for(int i = 0; i<=listadoMostrar.size();i++){
-							Venta_Dto ventaAux = new Venta_Dto();
-							ventaAux.setIdVenta(listadoMostrar.get(i).getIdVenta());
-							ventaAux.setFechaVenta(listadoMostrar.get(i).getFechaVenta());
-							ventaAux.setIdCliente(listadoMostrar.get(i).getIdCliente());
-							ventaAux.setIdProducto(listadoMostrar.get(i).getIdProducto());
-							ventaAux.setCantidad(listadoMostrar.get(i).getCantidad());
-							Object[] registroVenta ={
-									ventaAux.getIdVenta(),
-									ventaAux.getFechaVenta(),
-									ventaAux.getIdCliente(),
-									ventaAux.getIdProducto(),
-									ventaAux.getCantidad()
-							};
+					if(listadoMostrar!=null) {
+						if(listadoMostrar.isEmpty()) {
+							JOptionPane.showMessageDialog(null, "El cliente no ha realizado ninguna compra");
+						}else {
+							for(int i = 0; i<listadoMostrar.size();i++){
+								Venta_Dto ventaAux = new Venta_Dto();
+								ventaAux.setIdVenta(listadoMostrar.get(i).getIdVenta());
+								ventaAux.setFechaVenta(listadoMostrar.get(i).getFechaVenta());
+								ventaAux.setIdCliente(listadoMostrar.get(i).getIdCliente());
+								ventaAux.setIdProducto(listadoMostrar.get(i).getIdProducto());
+								ventaAux.setCantidad(listadoMostrar.get(i).getCantidad());
+								Object[] registroVenta ={
+										ventaAux.getIdVenta(),
+										ventaAux.getFechaVenta(),
+										ventaAux.getIdCliente(),
+										ventaAux.getIdProducto(),
+										ventaAux.getCantidad()
+								};
 
-							modeloTablaVentas.addRow(registroVenta);
+								modeloTablaVentas.addRow(registroVenta);
+							}
 						}
 					}
-
 				}
 			}
 		});
@@ -200,7 +226,9 @@ public class VentanaGestionVentas extends  JFrame {
 				}else if(comboBoxExportar.getSelectedIndex()==0 && comboBoxMostrar.getSelectedIndex()==1) {
 					//Aqui iría el codigo de XML por cliente
 				}else if(comboBoxExportar.getSelectedIndex()==1 && comboBoxMostrar.getSelectedIndex()==0) {
-					//Aqui iria el codigo de CSV por fecha
+					String fechaMin = JOptionPane.showInputDialog("Inserta la fecha de inicio de la busqueda en formato YYYY-MM-DD");
+					String fechaMax = JOptionPane.showInputDialog("Inserta la fecha de fin de la busqueda en formato YYYY-MM-DD");
+					coordinador_ventas.exportarCSVporFecha(fechaMin, fechaMax, tipoConexion);
 				}else if(comboBoxExportar.getSelectedIndex()==1 && comboBoxMostrar.getSelectedIndex()==1) {
 					String nifCliente;
 					nifCliente=JOptionPane.showInputDialog("Inserte el NIF del cliente cuya venta se quiere eliminar");

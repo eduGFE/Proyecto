@@ -1,6 +1,5 @@
 package controlador;
 
-import java.sql.Date;
 import java.util.ArrayList;
 
 import modelo.ventas.Venta_Dto;
@@ -83,8 +82,14 @@ public class Coordinador_Ventas {
 	public void exportarCSVporCliente(String nifCliente, String tipoConexion) {
 		miLogicaVentas.exportarCSVporCliente(nifCliente, tipoConexion);
 	}
-	
-	
 
-	
+	public ArrayList<Venta_Dto> mostrarVentasPorFecha(String fechaMin, String fechaMax, String tipoConexion) {
+		
+		return miLogicaVentas.mostrarVentasPorFecha(fechaMin, fechaMax, tipoConexion);
+	}
+
+	public void exportarCSVporFecha(String fechaMin, String fechaMax, String tipoConexion) {
+		miLogicaVentas.exportarCSVporFecha(fechaMin, fechaMax, tipoConexion);
+		
+	}	
 }
