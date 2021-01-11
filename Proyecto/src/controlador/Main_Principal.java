@@ -4,10 +4,12 @@ import javax.swing.JOptionPane;
 
 import modelo.clientes.Cliente_Logica;
 import modelo.productos.Producto_Logica;
+import modelo.ventas.Venta_Logica;
 import vista.VentanaBorrarClientes;
 import vista.VentanaConsultarClientes;
 import vista.VentanaGestionClientes;
 import vista.VentanaGestionProductos;
+import vista.VentanaGestionVentas;
 import vista.VentanaImportarClientes;
 import vista.VentanaInsertarClientes;
 import vista.VentanaMenuPrincipal;
@@ -30,7 +32,9 @@ public class Main_Principal {
 	private Producto_Logica miLogica_Producto;
 	private VentanaGestionProductos miVentanaGestionProductos;
 	//SUBSISTEMA VENTAS:
-	//FALTAN LAS DE VICTOR.
+	private Coordinador_Ventas miCoordinador_ventas;
+	private Venta_Logica miLogica_Ventas;
+	private VentanaGestionVentas miVentanaGestionVentas;
 	
 	
 	public static void main(String[] args) {
@@ -53,14 +57,17 @@ public class Main_Principal {
 			//Se instancian las clases de cada subsistema.
 			instarciarClasesClientes(tipoConex);
 			instarciarClasesProductos(tipoConex);
+			instanciarClasesVentas(tipoConex);
 			
 			//Se establecen las relaciones entre clases
 			establecerRelacionesClasesClientes();
 			establecerRelacionesClasesProductos();
+			establecerRelacionesClasesVentas();
 			
 			//Se establecen relaciones con la clase coordinador
 			establecerRelacionesCoordinadorClientes();
 			establecerRelacionesCoordinadorProductos();
+			establecerRelacionesCoordinadorVentas();
 
 			
 		}else {		
@@ -134,7 +141,23 @@ public class Main_Principal {
 	/*
 	 * MÉTODOS SUBSISTEMA VENTAS:
 	 */
-	//FALTAN LOS DE VICTOR.
+	private void instanciarClasesVentas(String tipoConex) {
+		 miCoordinador_ventas=new Coordinador_Ventas();
+		 miLogica_Ventas = new Venta_Logica();
+		 miVentanaGestionVentas = new VentanaGestionVentas(tipoConex);
+	 }
+
+	 private void establecerRelacionesClasesVentas() {
+		 miLogica_Ventas.setCoordinadorVentas(miCoordinador_ventas);
+		 miVentanaMenuPrincipal.setCoordinadorVentas(miCoordinador_ventas);
+		 miVentanaGestionVentas.setCoordinadorVentas(miCoordinador_ventas);
+	 }
+
+	 private void establecerRelacionesCoordinadorVentas() {
+		 miCoordinador_ventas.setMiLogicaVentas(miLogica_Ventas);
+		 miCoordinador_ventas.setMiVentanaMenuPrincipal(miVentanaMenuPrincipal);
+		 miCoordinador_ventas.setMiVentanaGestionVentas(miVentanaGestionVentas);
+	 }
 
 }
 
