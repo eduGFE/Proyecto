@@ -187,7 +187,7 @@ public class Venta_Dao{
 		//fechaActual almacena la fecha actual del sistema
 		Calendar fechaActual = new GregorianCalendar();
 		String dia = Integer.toString(fechaActual.get(Calendar.DATE));
-		String mes = Integer.toString(fechaActual.get(Calendar.MONTH));
+		String mes = Integer.toString(fechaActual.get(Calendar.MONTH)+1);
 		String ano = Integer.toString(fechaActual.get(Calendar.YEAR));
 		int cont = 1;
 		String contadorDiario="0"+cont;
@@ -310,7 +310,7 @@ public class Venta_Dao{
 		Conexion conex = new Conexion(tipoConexion);
 		boolean existeID=false;
 		//1º declaro string con la consulta
-		String consultaMuestraProductos= "SELECT id FROM CLIENTES";
+		String consultaMuestraProductos= "SELECT id FROM PRODUCTOS";
 		try {
 			Statement muestraProductos = conex.getConexion().createStatement();
 			ResultSet resultSetProductos = muestraProductos.executeQuery(consultaMuestraProductos);

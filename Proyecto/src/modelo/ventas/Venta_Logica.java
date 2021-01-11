@@ -105,7 +105,7 @@ public class Venta_Logica {
 	public ArrayList<Venta_Dto> mostrarVentasPorFecha(String fechaMin, String fechaMax, String tipoConexion) {
 		boolean esFechaValida = true;
 		//Defino un patron para comprobar la cadena. \\d -> indica que es un digito y lo que hay en las llaves indica la cantidad de digitos a introducir.
-		String formatoDePatronFecha = "\\d{4}-\\d{1,2}[0-12]-\\d{1,2}[0-31]";
+		String formatoDePatronFecha = "\\d{4}-\\d{1,2}-\\d{1,2}";
 
 		if(!Pattern.matches(formatoDePatronFecha, fechaMin)||!Pattern.matches(formatoDePatronFecha, fechaMax)) {
 			esFechaValida = false;
@@ -124,7 +124,7 @@ public class Venta_Logica {
 
 	public void exportarCSVporFecha(String fechaMin, String fechaMax, String tipoConexion) {
 		boolean esFechaValida=true;
-		String formatoDePatronFecha = "\\d{4}-\\d{1,2}[0-12]-\\d{1,2}[0-12]";
+		String formatoDePatronFecha = "\\d{4}-\\d{1,2}-\\d{1,2}";
 		if(!Pattern.matches(formatoDePatronFecha, fechaMin)||!Pattern.matches(formatoDePatronFecha, fechaMax)) {
 			esFechaValida = false;
 		}

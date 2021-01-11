@@ -110,12 +110,14 @@ public class VentanaGestionVentas extends  JFrame {
 		botonMostrarVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
+				modeloTablaVentas.setRowCount(0);
+				
 				//Si el comboBox marca intervalo de fechas:
 				if(comboBoxMostrar.getSelectedIndex()==0){
 					String fechaMin;
 					String fechaMax;
 					fechaMin = JOptionPane.showInputDialog("Introduce la fecha de inicio. El formato debe ser: YYYY-MM-DD");
-					fechaMax = JOptionPane.showInputDialog("Introduce la fecha de fin. El formato debe ser: YYYY-MM-DD\"");
+					fechaMax = JOptionPane.showInputDialog("Introduce la fecha de fin. El formato debe ser: YYYY-MM-DD");
 					ArrayList<Venta_Dto> listadoMostrar = coordinador_ventas.mostrarVentasPorFecha(fechaMin, fechaMax, tipoConexion);
 					if(listadoMostrar != null) {
 						if(listadoMostrar.isEmpty()){
