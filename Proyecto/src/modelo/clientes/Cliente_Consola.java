@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 /**
  * Realizar un programa, separado de la aplicación principal, con GUI de consola que sea
@@ -102,30 +103,45 @@ public class Cliente_Consola {
 	
 	/**
 	 * Método que crea un nuevo objeto Cliente y lo añade al Array List,
-	 * comprueba que el campo nombre tiene contenido.
+	 * comprueba previamente los campos.
 	 */
 	private static void crearCliente(ArrayList<Cliente_Dto> listaClientes) {
 
 		//Pedimos datos del cliente y los guardamos.
 		System.out.println("Vamos a introducir un nuevo Cliente:");
+		
 		//Nombre (comprobando que no esté vacio).
 		String nombre="";
 		do {
-			System.out.println("Introduce el NOMBRE del cliente:");  
+			System.out.println("\nIntroduce el NOMBRE del cliente:");  
 			nombre = entrada.nextLine();
-		}while (nombre.isEmpty());
+		}while (!esFormatoNombre(nombre));
+
 		//Dirección
-		System.out.println("Introduce la DIRECCIÓN del cliente:"); 
+		System.out.println("\nIntroduce la DIRECCIÓN del cliente:"); 
 		String direccion = entrada.nextLine();
-		//Población
-		System.out.println("Introduce la POBLACIÓN del cliente:");
-		String poblacion = entrada.nextLine();
-		//Teléfono
-		System.out.println("Introduce el TELÉFONO del cliente:");
-		String telefono = entrada.nextLine();
-		//Nif
-		System.out.println("Introduce el NIF del cliente:");
-		String nif = entrada.nextLine();
+
+		//Población (comprobando formato adecuado)
+		String poblacion="";
+		do {
+			System.out.println("\nIntroduce la POBLACIÓN del cliente:"); 
+			poblacion = entrada.nextLine();
+		}while (!esFormatoPoblacion(poblacion));
+		
+		//Teléfono (comprobando formato)
+		String telefono="";
+		do {
+			System.out.println("\nIntroduce el TELÉFONO del cliente:");
+			telefono = entrada.nextLine();
+		}while(!esFormatoTelefono(telefono));
+			
+		//Nif (comprobando formato)
+		String nif="";
+		do {
+			System.out.println("\nIntroduce el NIF del cliente:");
+			nif = entrada.nextLine();
+		}while (!esFormatoNif(nif));
+		
 			
 		//Creamos objeto auxiliar con los datos del cliente.
 		Cliente_Dto clienteAux = new Cliente_Dto(nombre,direccion,poblacion,telefono,nif);
@@ -234,6 +250,82 @@ public class Cliente_Consola {
 			System.out.println("Lista de clientes vacía !!");
 			return true;
 		}else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Método que comprueba que el String que recibe por parámetro 
+	 * tenga un formato con letras (aunque contenga algún espacio entremedias)
+	 * y que además no esté vacío.
+	 */	
+	private static boolean esFormatoNombre(String cadena) {
+		String patronCadena = "[A-Z|a-z|á|é|í|ó|ú|Á|É|Í|Ó|Ú|Ñ|ñ| ]+$";
+		 
+		if(Pattern.matches(patronCadena, cadena) && cadena.charAt(0) != ' ' && !cadena.isEmpty()){
+				return true;
+		}else {
+			System.out.println("Revise el formato:"
+					+ "\nNo puede estar el campo vacío y"
+					+ "\nsólo puede contener letras y espacios(después de letras).");
+			return false;
+		}
+	}
+	/**
+	 * Método que comprueba que el String que recibe por parámetro 
+	 * tenga un formato con letras (aunque contenga algún espacio entremedias).
+	 * También sería válido si está vacío.
+	 */	
+	private static boolean esFormatoPoblacion(String cadena) {
+		String patronCadena = "[A-Z|a-z|á|é|í|ó|ú|Á|É|Í|Ó|Ú|Ñ|ñ| ]+$";
+		 
+		if(Pattern.matches(patronCadena, cadena) && cadena.charAt(0) != ' ' || cadena.isEmpty()){
+				return true;
+		}else {
+			System.out.println("Revise el formato:"
+					+ "\nSólo puede contener letras y espacios(después de letras)."
+					+ "\nTambién se admite Población vacía.");
+			return false;
+		}
+	}
+	
+	/**
+	 * Método que comprueba que el String que recibe por parámetro 
+	 * tenga un formato de número de teléfono.
+	 * También sería válido si está vacío.
+	 */	
+	private static boolean esFormatoTelefono(String cadena) {
+		
+		String patronCadena1 = "[+]{1}[0-9]+$";
+		String patronCadena2 = "[0-9]+$";
+		 
+		if(Pattern.matches(patronCadena1,cadena) || Pattern.matches(patronCadena2,cadena) || cadena.isEmpty()){
+				return true;
+		}else {
+			System.out.println("Revise el formato:"
+					+ "\nSólo puede contener números y si es necesario el símbolo (+) para indicar el código de país."
+					+ "\nTambién se admite Teléfono vacío.");
+			return false;
+		}
+	}
+	
+	/**
+	 * Método que comprueba que el NIF (que recibe por parámetro) 
+	 * tenga un formato adecuado o esté vacío.
+	 */	
+	private static boolean esFormatoNif(String nif) {
+		//DNI válido = 8 Dígitos + Letra
+		String patronDni = "\\d{8}[A-Z|a-z]{1}";
+		//NIE válido = Letra + 7 Dígitos + Letra
+		String patronNie = "[A-Z|a-z]{1}\\d{7}[A-Z|a-z]{1}";
+		//Si el NIF tiene formato DNI o formato NIE o está vacío...
+		if(Pattern.matches(patronDni, nif) || Pattern.matches(patronNie, nif) || nif.isEmpty()){
+			return true;
+		}else {
+			System.out.println("Revise el formato:"
+					+ "\n DNI válido = 8 Dígitos + Letra."
+					+ "\n NIE válido = Letra + 7 Dígitos + Letra."
+					+ "\n También se admite NIF vacío.");
 			return false;
 		}
 	}

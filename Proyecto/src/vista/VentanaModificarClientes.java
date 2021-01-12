@@ -80,7 +80,14 @@ public class VentanaModificarClientes extends JFrame {
 		scrollPane_1.setBounds(10, 42, 606, 160);
 		getContentPane().add(scrollPane_1);
 		scrollPane_1.setViewportView(tablaListadoClientes);
-		infoTablaListadoClientes = new DefaultTableModel();
+		infoTablaListadoClientes = new DefaultTableModel() {
+			//Sobreescribimos el método isCellEditable para 
+			//que el user no pueda editar las celdas de la tabla.
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 		infoTablaListadoClientes.addColumn("ID");
 		infoTablaListadoClientes.addColumn("NOMBRE");
 		infoTablaListadoClientes.addColumn("DIRECCIÓN");
