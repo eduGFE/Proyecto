@@ -87,7 +87,7 @@ public class Producto_Dao {
 							"Información", JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					insertado = true;
-					Sentencia.setInt(1, 0);
+					Sentencia.setString(1, null);
 					Sentencia.setString(2, Productos.get(i).getDescripcion());
 					Sentencia.setInt(3, Productos.get(i).getStockanual());
 					Sentencia.setDouble(4, Productos.get(i).getPvp());
@@ -130,8 +130,9 @@ public class Producto_Dao {
 			if (model1.getRowCount() == 0) {
 				model1.addRow(new Object[] { "No hay productos" });
 			}
-			conex.desconectar();
 			Sentencia.close();
+			conex.desconectar();
+			
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -166,8 +167,9 @@ public class Producto_Dao {
 				JOptionPane.showMessageDialog(null, "Producto no encontrado", "Información",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
-			conex.desconectar();
 			Sentencia.close();
+			conex.desconectar();
+			
 
 		} catch (Exception e) {
 
@@ -198,8 +200,9 @@ public class Producto_Dao {
 				JOptionPane.showMessageDialog(null, "Producto no encontrado", "Información",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
-			conex.desconectar();
 			Sentencia.close();
+			conex.desconectar();
+			
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

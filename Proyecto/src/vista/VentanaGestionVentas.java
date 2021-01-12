@@ -109,9 +109,7 @@ public class VentanaGestionVentas extends  JFrame {
 		botonMostrarVentas.setBounds(168, 229, 144, 23);
 		botonMostrarVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				modeloTablaVentas.setRowCount(0);
-				
+				modeloTablaVentas.setRowCount(0);			
 				//Si el comboBox marca intervalo de fechas:
 				if(comboBoxMostrar.getSelectedIndex()==0){
 					String fechaMin;

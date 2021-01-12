@@ -69,6 +69,14 @@ public class Main_Principal {
 			establecerRelacionesCoordinadorProductos();
 			establecerRelacionesCoordinadorVentas();
 
+			//Mostramos al user con que SGBD trabajará, en función del argumento.
+			if (tipoConex.equals("1")) {
+				JOptionPane.showMessageDialog(null, "Argumento válido!"
+						+ "\nTrabajará con el SGBD - MySQL.", "Información", JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				JOptionPane.showMessageDialog(null, "Argumento válido!"
+						+ "\nTrabajará con el SGBD - SQLite3.", "Información", JOptionPane.INFORMATION_MESSAGE);
+			}
 			
 		}else {		
 			JOptionPane.showMessageDialog(null, "No ha insertado un argumento válido."
