@@ -5,7 +5,7 @@ public class Producto_Dto implements Serializable  {
 	private int id;
 	private String descripcion;
 	private int stockanual; 
-	private int pvp;
+	private double pvp;
 	
 	
 	public Producto_Dto(String desclipcion, int stockanual, int pvp) {
@@ -16,7 +16,7 @@ public class Producto_Dto implements Serializable  {
 	
 	
 	
-	public Producto_Dto(int id, String desclipcion, int stockanual, int pvp) {
+	public Producto_Dto(int id, String desclipcion, int stockanual, double pvp) {
 		this.id = id;
 		this.descripcion = desclipcion;
 		this.stockanual = stockanual;
@@ -41,7 +41,7 @@ public class Producto_Dto implements Serializable  {
 	public void setStockanual(int stockanual) {
 		this.stockanual = stockanual;
 	}
-	public int getPvp() {
+	public double getPvp() {
 		return pvp;
 	}
 	public void setPvp(int pvp) {

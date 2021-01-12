@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.table.DefaultTableModel;
@@ -49,7 +50,7 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 	}
 
 	public void initialize(String tipoConex) {
-
+		setTitle("Ventana gestion productos");
 		table1 = new JTable();
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(10, 42, 444, 171);
@@ -162,9 +163,10 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 
 			}
 		});
+		table1.setEnabled(false);
 		consultarporid.setBounds(333, 224, 189, 23);
 		getContentPane().add(consultarporid);
-
+		table2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JButton btnNewButton_4 = new JButton("Consultar todos los productos");
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -182,7 +184,7 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 		JButton btnNewButton = new JButton("Mostrar ficheros");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				mihilo.run();
 			}
 		});
@@ -222,10 +224,16 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 		String[] lista = directorio.list();
 		Object[] file = null;
 		model2.setRowCount(0);
-		for (int i = 0; i < lista.length; i++) {
-			file = new Object[] { lista[i] };
-		
-			model2.addRow(file);
+		if (directorio.list() != null) {
+			if (directorio.list().length != 0) {
+				for (String nombrefichero : directorio.list()) {
+					model2.addRow(new Object[] { nombrefichero });
+				}
+			} else {
+				model2.addRow(new Object[] { "No hay archivos en el directorio" });
+			}
+		} else {
+			model2.addRow(new Object[] { "El directorio NO existe" });
 		}
 	}
 }
