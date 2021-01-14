@@ -282,6 +282,7 @@ public class VentanaGestionVentas extends  JFrame {
 					}
 				}catch(Exception np) {
 					JOptionPane.showMessageDialog(null, "Operacion cancelada");
+					np.printStackTrace();
 				}
 			}
 		});

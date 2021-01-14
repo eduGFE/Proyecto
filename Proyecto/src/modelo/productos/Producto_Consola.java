@@ -96,7 +96,7 @@ public class Producto_Consola {
 	public static boolean IntroducirObjetoEnFichero(ArrayList<Producto_Dto> Productos_Dto) throws Exception {
 		boolean guardados = false;
 		Calendar fecha = new GregorianCalendar();
-		File Productos = new File("Productos");
+		File Productos = new File("Archivos Productos para Importar");
 		String fecha1;
 		int contadorfichero = 1;
 		String ano = Integer.toString((fecha.get(Calendar.YEAR))).substring(2, 4);

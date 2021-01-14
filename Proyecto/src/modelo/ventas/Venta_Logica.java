@@ -96,7 +96,10 @@ public class Venta_Logica {
 	public void exportarCSVporCliente(String nifCliente, String tipoConexion) {
 		boolean esDni;
 		String patronNif = "\\d{8}[A-Z a-z]{1}";
-		if(!Pattern.matches(patronNif, nifCliente)) {
+		
+		if(nifCliente.isBlank()){
+            esDni = true;
+        }else if(!Pattern.matches(patronNif, nifCliente)) {
 			esDni= false;
 		}else{
 			esDni = true;
@@ -137,6 +140,7 @@ public class Venta_Logica {
 	public void exportarCSVporFecha(String fechaMin, String fechaMax, String tipoConexion) {
 		boolean esFechaValida=true;
 		String formatoDePatronFecha = "\\d{4}-\\d{1,2}-\\d{1,2}";
+		
 		if(!Pattern.matches(formatoDePatronFecha, fechaMin)||!Pattern.matches(formatoDePatronFecha, fechaMax)) {
 			esFechaValida = false;
 		}

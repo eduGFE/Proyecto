@@ -105,7 +105,7 @@ public class Producto_Dao {
 			conex.desconectar();
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 
 		Productos.clear();
@@ -135,7 +135,7 @@ public class Producto_Dao {
 			
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		return model1;
 
@@ -205,7 +205,7 @@ public class Producto_Dao {
 			
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		return model1;
 	}
