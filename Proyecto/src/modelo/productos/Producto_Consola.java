@@ -53,48 +53,30 @@ public class Producto_Consola {
 		final AtomicInteger count = new AtomicInteger(0);
 		Producto_Dto producto = null;
 		int id = count.incrementAndGet();
-		String descripcion;
+		String descripcion = "";
 		String stockanual = null;
 		String pvp = null;
-
 		entrada.nextLine();
 		System.out.println("Inserta la descripción del producto");
 		descripcion = entrada.nextLine();
-		while (esnumero(descripcion) == true) {
 
-			System.out.println("Introduce una descripcion valida");
-			descripcion = entrada.nextLine();
-
-		}
-		while (descripcion.isEmpty()) {
-			System.out.println("Introduce una descripcion valida");
+		while (!esFormatodescripcionn(descripcion) || descripcion.equals("")) {
+			System.out.println("Inserta una descripción valida");
 			descripcion = entrada.nextLine();
 		}
-		while (letra(descripcion) == false) {
-			System.out.println("Introduce una descripcion valida");
-			descripcion = entrada.nextLine();
-		}
-
 		System.out.println("Introduce el stock anual");
 		stockanual = entrada.nextLine();
-		while (numero(stockanual)) {
-			System.out.println("Introduce un stock anual valido");
+		while (!esFormatostock(stockanual)) {
+			System.out.println("Inserta un stock valido");
 			stockanual = entrada.nextLine();
 		}
-		while (letra(stockanual)) {
-			System.out.println("Introduce un stock anual valido");
-			stockanual = entrada.nextLine();
-		}
-
 		System.out.println("Introduce el precio del producto");
 		pvp = entrada.nextLine();
-		while (numero(pvp)) {
-			System.out.println("Introduce un precio valido");
+
+		while (!esFormatopvp(pvp)) {
+			System.out.println("Inserta un pvp valido");
 			pvp = entrada.nextLine();
-		}
-		while (letra(pvp)) {
-			System.out.println("Introduce un precio valido");
-			pvp = entrada.nextLine();
+			
 		}
 
 		if (stockanual.equals("") && !pvp.equals("")) {
@@ -153,46 +135,34 @@ public class Producto_Consola {
 
 	}
 
-	// Comprueba si un numero es numeros o se a introducido alguna letra u otro
-	// caracter
-	public static boolean esnumero(String cadena) {
+	private static boolean esFormatodescripcionn(String cadena) {
+		String patronCadena = "[A-Z|a-z|á|é|í|ó|ú|Á|É|Í|Ó|Ú|Ñ|ñ| ]+$";
 
-		boolean resultado;
-
-		try {
-			Integer.parseInt(cadena);
-			resultado = true;
-
-		} catch (NumberFormatException excepcion) {
-			resultado = false;
-		}
-
-		return resultado;
-	}
-
-	public static boolean letra(String cadena) {
-
-		for (int i = 0; i < cadena.length(); i++) {
-			char caracter = cadena.toUpperCase().charAt(i);
-			int ascii = (int) caracter;
-			if (ascii != 165 && (ascii < 65 || ascii > 90) && ascii != 32)
-				return false;
-		}
-		if (cadena.equals("")) {
+		if (Pattern.matches(patronCadena, cadena) && cadena.charAt(0) != ' ' || cadena.isEmpty()) {
+			return true;
+		} else {
 			return false;
 		}
-		return true;
 	}
 
-	public static boolean numero(String cadena) {
+	private static boolean esFormatostock(String cadena) {
+		String patronCadena2 = "[0-9]+$";
 
-		for (int i = 0; i < cadena.length(); i++) {
-			char caracter = cadena.toUpperCase().charAt(i);
-			int ascii = (int) caracter;
-			if ((ascii >= 48 || ascii <= 57) && ascii == 13 || ascii == 32)
-				return true;
+		if (Pattern.matches(patronCadena2, cadena) || cadena.isEmpty()) {
+			return true;
+		} else {
+			return false;
 		}
-		return false;
+	}
+
+	private static boolean esFormatopvp(String cadena) {
+		String patronCadena2 = "[0|1|2|3|4|5|6|7|8|9|.]+$";
+
+		if (Pattern.matches(patronCadena2, cadena) && cadena.charAt(0) != '.' || cadena.isEmpty()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
