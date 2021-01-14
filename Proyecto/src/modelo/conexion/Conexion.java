@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
 public class Conexion {
 	//atributo donde se almacena la conexion creada
 	Connection conexion;
@@ -31,8 +33,11 @@ public class Conexion {
 			}
 		}catch(ClassNotFoundException e) {
 			System.out.println("No se ha podido cargar el driver");
+			mostrarMensajeError("Error! No se ha podido cargar el Driver !");
 		} catch (SQLException e) {
 			System.out.println("No se ha podido acceder a la base de datos.");
+			mostrarMensajeError("Error! No se ha podido conectar a la BD !");
+			
 		}
 	}
 	
@@ -50,6 +55,10 @@ public class Conexion {
 		} catch (SQLException e) {
 			System.out.println(e);
 		}
+	}
+	
+	private void mostrarMensajeError(String mensaje) {
+		JOptionPane.showMessageDialog(null,mensaje,"ATENCIÓN !!",JOptionPane.ERROR_MESSAGE);
 	}
 
 }

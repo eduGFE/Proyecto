@@ -1,5 +1,6 @@
 package controlador;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 import modelo.ventas.Venta_Dto;
@@ -66,7 +67,7 @@ public class Coordinador_Ventas {
 		miLogicaVentas.insertaVenta(venta, tipoConexion);
 	}
 
-	public void borrarVentaPorID(int idVenta, String tipoConexion) {
+	public void borrarVentaPorID(String idVenta, String tipoConexion) {
 		miLogicaVentas.borrarVentaPorID(idVenta, tipoConexion);
 		
 	}
@@ -89,7 +90,7 @@ public class Coordinador_Ventas {
 	}
 
 	public void exportarCSVporFecha(String fechaMin, String fechaMax, String tipoConexion) {
-		miLogicaVentas.exportarCSVporFecha(fechaMin, fechaMax, tipoConexion);
-		
-	}	
+		miLogicaVentas.exportarCSVporFecha(fechaMin, fechaMax, tipoConexion);		
+	}
+	
 }

@@ -9,13 +9,11 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.table.DefaultTableModel;
 
 import controlador.Coordinador_Ventas;
-import modelo.ventas.Venta_Dao;
 import modelo.ventas.Venta_Dto;
-import modelo.conexion.*;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -32,7 +30,11 @@ public class VentanaGestionVentas extends  JFrame {
 	private JComboBox comboBoxMostrar;
 	private JButton botonExportar;
 	private JTable tablaVentas;
-	private DefaultTableModel modeloTablaVentas = new DefaultTableModel();
+	private DefaultTableModel modeloTablaVentas = new DefaultTableModel() {
+			public boolean isCellEditable(int row, int column) {
+             return false;
+			}
+	};
 
 	public VentanaGestionVentas(String tipoConex) {
 		setTitle("Ventana Gestion Ventas");
@@ -56,7 +58,7 @@ public class VentanaGestionVentas extends  JFrame {
 		String tipoConexion = tipoConex;
 		tablaVentas = new JTable();
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 654, 174);
+		scrollPane.setBounds(10, 11, 677, 174);
 		getContentPane().add(scrollPane);
 		scrollPane.setViewportView(tablaVentas);
 		modeloTablaVentas.addColumn("Id venta");
@@ -64,8 +66,11 @@ public class VentanaGestionVentas extends  JFrame {
 		modeloTablaVentas.addColumn("ID cliente");
 		modeloTablaVentas.addColumn("ID producto");
 		modeloTablaVentas.addColumn("Cantidad");
+
+
 		tablaVentas.setModel(modeloTablaVentas);
-		setBounds(100, 100, 682, 307);
+
+		setBounds(100, 100, 711, 331);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 
@@ -76,47 +81,69 @@ public class VentanaGestionVentas extends  JFrame {
 				coordinador_ventas.ocultarVentanaGestionVentas();
 			}
 		});
-		botonVolver.setBounds(10, 229, 89, 23);
+		botonVolver.setBounds(10, 265, 135, 23);
 		getContentPane().add(botonVolver);
 		//BOTON INSERTAR VENTA
 		JButton botonInsertaVenta = new JButton("Insertar nueva venta");
 		botonInsertaVenta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				Venta_Dto venta = new Venta_Dto();
+				String patronNumeros =  "[0-9]*";
+				String idCliente;
+				String idProducto;
+				String cantidad;
 				try {
-					venta.setIdCliente(Integer.parseInt(JOptionPane.showInputDialog("Introduce ID cliente")));
-					venta.setIdProducto(Integer.parseInt(JOptionPane.showInputDialog("Introduce ID producto")));
-					venta.setCantidad(Integer.parseInt(JOptionPane.showInputDialog("Introduce las unidades a vender")));
-					coordinador_ventas.insertaVenta(venta, tipoConex);
-				}catch(NumberFormatException excepcionNumeros) {
-					JOptionPane.showMessageDialog(null, "Los campos a completar solo admiten datos numericos");
+					idCliente = JOptionPane.showInputDialog("Introduce ID cliente");
+					idProducto = JOptionPane.showInputDialog("Introduce ID producto");
+					cantidad = JOptionPane.showInputDialog("Introduce las unidades a vender");
+
+					if(Pattern.matches(patronNumeros, idCliente)&& Pattern.matches(patronNumeros, idProducto) && Pattern.matches(patronNumeros, cantidad)) {
+						venta.setIdCliente(Integer.parseInt(idCliente));
+						venta.setIdProducto(Integer.parseInt(idProducto));
+						venta.setCantidad(Integer.parseInt(cantidad));
+						coordinador_ventas.insertaVenta(venta, tipoConex);
+					}else {
+						JOptionPane.showMessageDialog(null, "Los datos no se han introducido correctamente");
+					}
+				}catch(Exception np) {
+					JOptionPane.showMessageDialog(null, "Operacion cancelada");
 				}
+
+
+
+
 			}
 		});
-		botonInsertaVenta.setBounds(10, 196, 135, 23);
+		botonInsertaVenta.setBounds(10, 196, 162, 23);
 		getContentPane().add(botonInsertaVenta);
 
 
 		comboBoxMostrar = new JComboBox();
 		comboBoxMostrar.setModel(new DefaultComboBoxModel(new String[] {"Mostrar por fecha.", "Mostrar por cliente."}));
 		comboBoxMostrar.setToolTipText("");
-		comboBoxMostrar.setBounds(168, 196, 144, 23);
+		comboBoxMostrar.setBounds(196, 196, 144, 23);
 		getContentPane().add(comboBoxMostrar);
 
 
 		//BOTON MOSTRAR VENTAS
 		botonMostrarVentas = new JButton("Mostrar ventas");
-		botonMostrarVentas.setBounds(168, 229, 144, 23);
+		botonMostrarVentas.setBounds(196, 230, 144, 23);
 		botonMostrarVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				modeloTablaVentas.setRowCount(0);
 				//Si el comboBox marca intervalo de fechas:
 				if(comboBoxMostrar.getSelectedIndex()==0){
 					String fechaMin;
 					String fechaMax;
-					fechaMin = JOptionPane.showInputDialog("Introduce la fecha de inicio. El formato debe ser: YYYY-MM-DD");
-					fechaMax = JOptionPane.showInputDialog("Introduce la fecha de fin. El formato debe ser: YYYY-MM-DD\"");
-					ArrayList<Venta_Dto> listadoMostrar = coordinador_ventas.mostrarVentasPorFecha(fechaMin, fechaMax, tipoConexion);
+					ArrayList<Venta_Dto> listadoMostrar=null;
+					try {
+						fechaMin = JOptionPane.showInputDialog("Introduce la fecha de inicio. El formato debe ser: YYYY-MM-DD");
+						fechaMax = JOptionPane.showInputDialog("Introduce la fecha de fin. El formato debe ser: YYYY-MM-DD\"");
+						listadoMostrar = coordinador_ventas.mostrarVentasPorFecha(fechaMin, fechaMax, tipoConexion);
+					}catch(Exception np) {
+						JOptionPane.showMessageDialog(null, "Operacion cancelada");
+					}
+
 					if(listadoMostrar != null) {
 						if(listadoMostrar.isEmpty()){
 							JOptionPane.showMessageDialog(null, "No se  han encontrado ventas en ese rango de fechas");
@@ -146,9 +173,14 @@ public class VentanaGestionVentas extends  JFrame {
 					//Si el comboBox marca busqueda por NIF
 				}else if(comboBoxMostrar.getSelectedIndex()==1){
 					String nifCliente;
-					ArrayList<Venta_Dto> listadoMostrar;
-					nifCliente = JOptionPane.showInputDialog("Introduce el NIF del cliente a consultar");
-					listadoMostrar = coordinador_ventas.mostrarVentasPorNIF(nifCliente, tipoConexion);
+					ArrayList<Venta_Dto> listadoMostrar = null;
+					try {
+						nifCliente = JOptionPane.showInputDialog("Introduce el NIF del cliente a consultar");
+						listadoMostrar = coordinador_ventas.mostrarVentasPorNIF(nifCliente, tipoConexion);
+					}catch(Exception np) {
+						JOptionPane.showMessageDialog(null, "Operacion cancelada");
+					}
+					
 					if(listadoMostrar!=null) {
 						if(listadoMostrar.isEmpty()) {
 							JOptionPane.showMessageDialog(null, "El cliente no ha realizado ninguna compra");
@@ -180,69 +212,82 @@ public class VentanaGestionVentas extends  JFrame {
 
 		JComboBox comboBoxEliminar = new JComboBox();
 		comboBoxEliminar.setModel(new DefaultComboBoxModel(new String[] {"Eliminar por ID.", "Eliminar por cliente."}));
-		comboBoxEliminar.setBounds(352, 196, 144, 23);
+		comboBoxEliminar.setBounds(375, 196, 144, 23);
 		getContentPane().add(comboBoxEliminar);
 
 		//BOTON ELIMINAR VENTAS
 		botonEliminarVentas = new JButton("Eliminar ventas");
-		botonEliminarVentas.setBounds(352, 229, 144, 23);
+		botonEliminarVentas.setBounds(375, 230, 144, 23);
 		botonEliminarVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(comboBoxEliminar.getSelectedIndex()==0){
-					String cadenaIdVenta;
-					int idVenta;
-					cadenaIdVenta = JOptionPane.showInputDialog("Inserte el ID de la venta que desea eliminar");
-					try {
-						idVenta=Integer.parseInt(cadenaIdVenta);
-						coordinador_ventas.borrarVentaPorID(idVenta, tipoConex);
-					}catch(NumberFormatException excepcionNumeros){
-						JOptionPane.showMessageDialog(null, "La ID a introducir debe ser un numero entero");
-					}
+				try {
+					//Si el combobox marca eliminar por id
 
-				}else if(comboBoxEliminar.getSelectedIndex()==1) {
-					String nifCliente;
-					nifCliente=JOptionPane.showInputDialog("Inserte el NIF del cliente cuya venta se quiere eliminar");
-					coordinador_ventas.borrarVentaPorNIF(nifCliente, tipoConexion);
+					if(comboBoxEliminar.getSelectedIndex()==0){
+						String idVenta= JOptionPane.showInputDialog("Inserte el ID de la venta que desea eliminar");
+						coordinador_ventas.borrarVentaPorID(idVenta, tipoConexion);
+
+						//si el combobox marca eliminar por cliente
+					}else if(comboBoxEliminar.getSelectedIndex()==1) {
+						String nifCliente;
+						nifCliente=JOptionPane.showInputDialog("Inserte el NIF del cliente cuya venta se quiere eliminar");
+						coordinador_ventas.borrarVentaPorNIF(nifCliente, tipoConexion);
+					}
+				}catch(Exception np) {
+					JOptionPane.showMessageDialog(null, "Operacion cancelada");
 				}
+
 			}
 		});
 		getContentPane().add(botonEliminarVentas);
 
-		JComboBox comboBoxExportar = new JComboBox();
-		comboBoxExportar.setModel(new DefaultComboBoxModel(new String[] {"Exportar XML", "Exportar CSV"}));
-		comboBoxExportar.setBounds(543, 196, 121, 23);
-		getContentPane().add(comboBoxExportar);
+		JComboBox comboBoxExportarTipo = new JComboBox();
+		comboBoxExportarTipo.setModel(new DefaultComboBoxModel(new String[] {"Exportar XML", "Exportar CSV"}));
+		comboBoxExportarTipo.setBounds(554, 196, 121, 23);
+		getContentPane().add(comboBoxExportarTipo);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setVisible(false);
 
+		JComboBox comboBoxExportarFiltro = new JComboBox();
+		comboBoxExportarFiltro.setModel(new DefaultComboBoxModel(new String[] {"Exportar por fechas", "Exportar por cliente"}));
+		comboBoxExportarFiltro.setToolTipText("");
+		comboBoxExportarFiltro.setBounds(554, 230, 121, 23);
+		getContentPane().add(comboBoxExportarFiltro);
+
 		//BOTON EXPORTAR
 		botonExportar = new JButton("Exportar datos");
-		botonExportar.setBounds(543, 229, 121, 23);
+		botonExportar.setBounds(554, 264, 121, 23);
 		botonExportar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(comboBoxExportar.getSelectedIndex()==0 && comboBoxMostrar.getSelectedIndex()==0) {
-					//Aqui iria el codigo de XML por fecha
-				}else if(comboBoxExportar.getSelectedIndex()==0 && comboBoxMostrar.getSelectedIndex()==1) {
-					//Aqui iría el codigo de XML por cliente
-				}else if(comboBoxExportar.getSelectedIndex()==1 && comboBoxMostrar.getSelectedIndex()==0) {
-					String fechaMin = JOptionPane.showInputDialog("Inserta la fecha de inicio de la busqueda en formato YYYY-MM-DD");
-					String fechaMax = JOptionPane.showInputDialog("Inserta la fecha de fin de la busqueda en formato YYYY-MM-DD");
-					coordinador_ventas.exportarCSVporFecha(fechaMin, fechaMax, tipoConexion);
-				}else if(comboBoxExportar.getSelectedIndex()==1 && comboBoxMostrar.getSelectedIndex()==1) {
-					String nifCliente;
-					nifCliente=JOptionPane.showInputDialog("Inserte el NIF del cliente cuya venta se quiere eliminar");
-					coordinador_ventas.exportarCSVporCliente(nifCliente, tipoConexion);
+				try {
 
+
+					if(comboBoxExportarTipo.getSelectedIndex()==0 && comboBoxExportarFiltro.getSelectedIndex()==0) {
+						//Aqui iria el codigo de XML por fecha
+					}else if(comboBoxExportarTipo.getSelectedIndex()==0 && comboBoxExportarFiltro.getSelectedIndex()==1) {
+						//Aqui iría el codigo de XML por cliente
+
+						//Si el combo box marca exportar a CSV y el otro combobox marca por fecha.
+					}else if(comboBoxExportarTipo.getSelectedIndex()==1 && comboBoxExportarFiltro.getSelectedIndex()==0) {
+						String fechaMin = JOptionPane.showInputDialog("Inserta la fecha de inicio de la busqueda en formato YYYY-MM-DD");
+						String fechaMax = JOptionPane.showInputDialog("Inserta la fecha de fin de la busqueda en formato YYYY-MM-DD");
+						coordinador_ventas.exportarCSVporFecha(fechaMin, fechaMax, tipoConexion);
+						//Si el combobox marca exportar a CSV y el otro comboBox marca por cliente
+					}else if(comboBoxExportarTipo.getSelectedIndex()==1 && comboBoxExportarFiltro.getSelectedIndex()==1) {
+						String nifCliente;
+						nifCliente=JOptionPane.showInputDialog("Inserte el NIF del cliente cuya venta se quiere eliminar");
+						coordinador_ventas.exportarCSVporCliente(nifCliente, tipoConexion);
+
+					}
+				}catch(Exception np) {
+					JOptionPane.showMessageDialog(null, "Operacion cancelada");
 				}
 			}
 		});
 		getContentPane().add(botonExportar);
-
-
 	}
 	public void setCoordinadorVentas(Coordinador_Ventas coordinador_ventas) {
 		this.coordinador_ventas = coordinador_ventas;
 	}
-
 }

@@ -222,6 +222,7 @@ public class Cliente_Dao {
 			//Capturamos excepciones.		
 		} catch (SQLException e) {
 			mostrarMensajeError("Error! No se pudo realizar la eliminación !");
+			e.printStackTrace();
 		} catch (Exception e) {
 			mostrarMensajeError("Error! No se pudo realizar la eliminación !");
 		}		

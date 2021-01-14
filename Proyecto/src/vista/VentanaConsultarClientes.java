@@ -121,8 +121,10 @@ public class VentanaConsultarClientes extends JFrame {
 	 * Si no existen Clientes coincidentes avisa al user de ello mediante un cuadro de diálogo.
 	 */	
 	private void mostrarClientesCoincidentes(String tipoConex) {
-		//Creamos ArrayList donde se guardarán los objetos DTO de los clientes.
-		ArrayList<Cliente_Dto> listaClientesDTO = miCoordinador_clientes.consultarClientes(txtNif.getText(),  tipoConex);
+		
+		//Creamos ArrayList donde se guardarán los objetos DTO de los clientes, llamando al método que los busca.
+		ArrayList<Cliente_Dto> listaClientesDTO = 
+				miCoordinador_clientes.consultarClientes(txtNif.getText(),  tipoConex);
 		
 		if (listaClientesDTO!=null) { //Si hay clientes en la BD rellenamos la tabla
 

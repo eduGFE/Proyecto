@@ -1,7 +1,5 @@
 package modelo.ventas;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -13,17 +11,18 @@ import controlador.Coordinador_Ventas;
 public class Venta_Logica {
 	private Coordinador_Ventas miCoordinadorVentas;
 
-
 	public void setCoordinadorVentas(Coordinador_Ventas miCoordinador) {
 		this.miCoordinadorVentas=miCoordinador;
 	}
 
 	public void insertaVenta(Venta_Dto venta, String tipoConex ) {
-		boolean seInserta;
-
-		
+		boolean seInserta=false;
 		Venta_Dao miVenta = new Venta_Dao();
-		seInserta = miVenta.insertaVenta(venta, tipoConex);
+		if (venta.getCantidad()<=9999){
+			seInserta = miVenta.insertaVenta(venta, tipoConex);
+		}else{
+			JOptionPane.showMessageDialog(null, "La cantidad introducida excede el limite");
+		}
 		if(seInserta) {
 			JOptionPane.showMessageDialog(null, "SE HA INSERTADO EL REGISTRO CORRECTAMENTE");
 		}else {
@@ -31,39 +30,70 @@ public class Venta_Logica {
 		}
 	}
 
-	public void borrarVentaPorID(int idVenta, String tipoConex) {
-		boolean seBorra;
-		Venta_Dao miVenta = new Venta_Dao();
-		seBorra = miVenta.borraVentaPorID(idVenta, tipoConex);
-		if(seBorra) {
-			JOptionPane.showMessageDialog(null, "SE HA ELIMINADO EL REGISTRO CORRECTAMENTE");
+	public void borrarVentaPorID(String cadenaIdVenta, String tipoConex){
+		int idVenta;
+		Venta_Dao venta = new Venta_Dao();
+		String patronNumeros =  "[0-9]*";
+		
+		if(cadenaIdVenta.isBlank()) {
+			JOptionPane.showMessageDialog(null, "No ha completado la informacion en el campo");
+		}else if(Pattern.matches(patronNumeros, cadenaIdVenta)) {
+			idVenta = Integer.parseInt(cadenaIdVenta);
+			if(venta.borraVentaPorID(idVenta, tipoConex)){
+				JOptionPane.showMessageDialog(null, "SE HA ELIMINADO EL REGISTRO CORRECTAMENTE");
+			}else {
+				JOptionPane.showMessageDialog(null, "NO SE HA ELIMINADO EL REGISTRO");
+			}	
 		}else {
-			JOptionPane.showMessageDialog(null, "NO SE HA ELIMINADO EL REGISTRO");
+			JOptionPane.showMessageDialog(null, "La ID que se ha introducido es incorrecta");
 		}
 	}
 
 	public void borrarVentaPorNIF(String nifCliente, String tipoConex) {
-		boolean seBorra;
-		Venta_Dao miVenta = new Venta_Dao();
-		seBorra = miVenta.borrarVentaPorNIF(nifCliente, tipoConex);
+		Venta_Dao venta = new Venta_Dao();
 		String patronNif = "\\d{8}[A-Z a-z]{1}";
-		if(!Pattern.matches(patronNif, nifCliente)) {
-			seBorra= false;
-		}else {
-			seBorra = true;
+		if(Pattern.matches(patronNif, nifCliente)) {
+			if(venta.borrarVentaPorNIF(nifCliente, tipoConex)){
+				JOptionPane.showMessageDialog(null, "SE HA ELIMINADO EL REGISTRO CORRECTAMENTE");
+			}else {
+				JOptionPane.showMessageDialog(null, "NO SE HA ELIMINADO NINGUN REGISTRO");
+			}
+		}else if(nifCliente.isBlank()) {
+			JOptionPane.showMessageDialog(null, "Se eliminarán las ventas de todos los clientes que no han introducido DNI");
+			if(venta.borrarVentaPorNIF(nifCliente, tipoConex)) {
+				JOptionPane.showMessageDialog(null, "SE HA ELIMINADO EL REGISTRO CORRECTAMENTE");
+			}else {
+				JOptionPane.showMessageDialog(null, "NO SE HA ELIMINADO NINGUN REGISTRO");
+			}
+
+		}else{
+			JOptionPane.showMessageDialog(null, "El nif que se ha introducido es incorrecto");
 		}
-
-
-		if(seBorra) {
-			JOptionPane.showMessageDialog(null, "SE HA ELIMINADO EL REGISTRO CORRECTAMENTE");
-		}else {
-			JOptionPane.showMessageDialog(null, "NO SE HA ELIMINADO EL REGISTRO");
-		}
-
 	}
 
 	public ArrayList<Venta_Dto> mostrarVentasPorNIF(String nifCliente, String tipoConexion){
+		boolean esDni =true;
+		String patronNif = "\\d{8}[A-Z a-z]{1}";
+		if(nifCliente.isBlank()){
+			esDni= true;
+		}else if(Pattern.matches(patronNif, nifCliente)) {
+			esDni= true;
+		}else{
+			esDni = false;
+		}
 
+		if(esDni) {
+			Venta_Dao venta= new Venta_Dao();
+			ArrayList<Venta_Dto> listadoVentas;
+			listadoVentas =  venta.mostrarVentasPorNIF(nifCliente, tipoConexion);
+			return listadoVentas;
+		}else{
+			JOptionPane.showMessageDialog(null, "El DNI introducido no es valido");
+		}
+		return null;
+	}
+
+	public void exportarCSVporCliente(String nifCliente, String tipoConexion) {
 		boolean esDni;
 		String patronNif = "\\d{8}[A-Z a-z]{1}";
 		if(!Pattern.matches(patronNif, nifCliente)) {
@@ -73,29 +103,8 @@ public class Venta_Logica {
 		}
 
 		if(esDni) {
-			Venta_Dao venta= new Venta_Dao();
-			ArrayList<Venta_Dto> listadoVentas;
-			listadoVentas =  venta.mostrarVentasPorNIF(nifCliente, tipoConexion);
-			return listadoVentas;
-		}else {
-			JOptionPane.showMessageDialog(null, "El DNI introducido no es valido");
-		}
-		return null;
-	}
-
-	public void exportarCSVporCliente(String nifCliente, String tipoConexion) {
-		boolean seExporta;
-		String patronNif = "\\d{8}[A-Z a-z]{1}";
-		if(!Pattern.matches(patronNif, nifCliente)) {
-			seExporta= false;
-		}else{
-			seExporta = true;
-		}
-
-		if(seExporta) {
 			Venta_Dao venta = new Venta_Dao();
-			seExporta=venta.exportarCSVporCliente(nifCliente, tipoConexion);
-			JOptionPane.showMessageDialog(null, "SE HAN EXPORTADO LOS DATOS DEL CLIENTE AL FICHERO CSV");
+			venta.exportarCSVporCliente(nifCliente, tipoConexion);
 		}else {
 			JOptionPane.showMessageDialog(null, "NO SE HAN PODIDO EXPORTAR LOS DATOS DEL CLIENTE AL FICHERO CSV");
 		}
@@ -104,13 +113,16 @@ public class Venta_Logica {
 
 	public ArrayList<Venta_Dto> mostrarVentasPorFecha(String fechaMin, String fechaMax, String tipoConexion) {
 		boolean esFechaValida = true;
+		boolean esOrdenCorrecto = true;
 		//Defino un patron para comprobar la cadena. \\d -> indica que es un digito y lo que hay en las llaves indica la cantidad de digitos a introducir.
-		String formatoDePatronFecha = "\\d{4}-\\d{1,2}[0-12]-\\d{1,2}[0-31]";
-
+		String formatoDePatronFecha = "\\d{4}-\\d{1,2}-\\d{1,2}";
+		//COMPRUEBA EL FORMATO DE LA FECHA
 		if(!Pattern.matches(formatoDePatronFecha, fechaMin)||!Pattern.matches(formatoDePatronFecha, fechaMax)) {
 			esFechaValida = false;
 		}
-
+		
+		
+		
 		if(esFechaValida == false){
 			JOptionPane.showMessageDialog(null, "La fecha introducida es incorrecta");
 		}else{
@@ -124,7 +136,7 @@ public class Venta_Logica {
 
 	public void exportarCSVporFecha(String fechaMin, String fechaMax, String tipoConexion) {
 		boolean esFechaValida=true;
-		String formatoDePatronFecha = "\\d{4}-\\d{1,2}[0-12]-\\d{1,2}[0-12]";
+		String formatoDePatronFecha = "\\d{4}-\\d{1,2}-\\d{1,2}";
 		if(!Pattern.matches(formatoDePatronFecha, fechaMin)||!Pattern.matches(formatoDePatronFecha, fechaMax)) {
 			esFechaValida = false;
 		}
