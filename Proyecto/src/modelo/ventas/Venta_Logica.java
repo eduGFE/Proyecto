@@ -35,7 +35,7 @@ public class Venta_Logica {
 		Venta_Dao venta = new Venta_Dao();
 		String patronNumeros =  "[0-9]*";
 		
-		if(cadenaIdVenta.isBlank()) {
+		if(cadenaIdVenta.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No ha completado la informacion en el campo");
 		}else if(Pattern.matches(patronNumeros, cadenaIdVenta)) {
 			idVenta = Integer.parseInt(cadenaIdVenta);
@@ -58,7 +58,7 @@ public class Venta_Logica {
 			}else {
 				JOptionPane.showMessageDialog(null, "NO SE HA ELIMINADO NINGUN REGISTRO");
 			}
-		}else if(nifCliente.isBlank()) {
+		}else if(nifCliente.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Se eliminarán las ventas de todos los clientes que no han introducido DNI");
 			if(venta.borrarVentaPorNIF(nifCliente, tipoConex)) {
 				JOptionPane.showMessageDialog(null, "SE HA ELIMINADO EL REGISTRO CORRECTAMENTE");
@@ -74,7 +74,7 @@ public class Venta_Logica {
 	public ArrayList<Venta_Dto> mostrarVentasPorNIF(String nifCliente, String tipoConexion){
 		boolean esDni =true;
 		String patronNif = "\\d{8}[A-Z a-z]{1}";
-		if(nifCliente.isBlank()){
+		if(nifCliente.isEmpty()){
 			esDni= true;
 		}else if(Pattern.matches(patronNif, nifCliente)) {
 			esDni= true;

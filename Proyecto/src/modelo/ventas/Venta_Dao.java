@@ -122,7 +122,7 @@ public class Venta_Dao{
 		Conexion conex = new Conexion(tipoConexion);
 		ResultSet resultado;
 		//Si la cadena entra vacía, se buscan null
-		if(nifCliente.isBlank()){
+		if(nifCliente.isEmpty()){
 			String consultaSQL = "SELECT * FROM ventas WHERE idcliente = (SELECT id FROM clientes WHERE NIF IS NULL)";
 			try {
 				PreparedStatement consultaVentasPorNif = conex.getConexion().prepareStatement(consultaSQL);
@@ -202,7 +202,7 @@ public class Venta_Dao{
 	/*
 	public boolean exportarXMLporFechas(Date fechaMin, Date fechaMax, String tipoConexion) {					//PENDIENTE
 
-	}
+	}*/
 
 	public boolean exportarXMLporCliente(String nifCliente, String tipoConexion) {								//PENDIENTE
 		boolean seExporta=false;
@@ -214,7 +214,7 @@ public class Venta_Dao{
 
 		return seExporta;
 	}
-	 */
+	 
 
 	public void exportarCSVporCliente(String nifCliente, String tipoConexion){
 
@@ -233,7 +233,7 @@ public class Venta_Dao{
 				JOptionPane.showMessageDialog(null, "NO HAY CONTENIDO EN LA TABLA. NO SE IMPORTARÁ EL FICHERO");
 			}else {
 				resultado.previous();
-				File ficheroCSV = new File("C:\\Users\\vlagu\\Desktop\\2º DAM\\Proyecto\\Ventas\\"+nombreFichero+".csv");
+				File ficheroCSV = new File("C:\\Users\\Javie\\Proyecto_AD\\Proyecto\\Proyecto\\"+nombreFichero+".csv");
 				FileWriter flujoEscritura = new FileWriter(ficheroCSV);
 				BufferedWriter flujoEscrituraBuffer = new BufferedWriter(flujoEscritura);
 				while(resultado.next()){
@@ -284,7 +284,7 @@ public class Venta_Dao{
 			}else{
 				//al hacer el if anterior salta el primer registro, hay que retroceder para que lea la tabla desde el principio
 				resultado.previous();
-				File ficheroCSV = new File("C:\\Users\\vlagu\\Desktop\\2º DAM\\Proyecto\\Ventas\\"+nombreFichero+".csv");
+				File ficheroCSV = new File("C:\\Users\\Javie\\Proyecto_AD\\Proyecto\\Proyecto\\"+nombreFichero+".csv");
 				FileWriter flujoEscritura = new FileWriter(ficheroCSV);
 				BufferedWriter flujoEscrituraBuffer = new BufferedWriter(flujoEscritura);
 				while(resultado.next()){
@@ -384,7 +384,7 @@ public class Venta_Dao{
 			Statement muestraClientes = conex.getConexion().createStatement();
 			ResultSet resultSetClientes;
 			resultSetClientes=muestraClientes.executeQuery(consultaMuestraClientes);
-			if(nifCliente.isBlank()){
+			if(nifCliente.isEmpty()){
 				while(resultSetClientes.next()&&existeNIF==false) {
 					if((resultSetClientes.getObject(1))==null) {
 						existeNIF=true;
@@ -408,7 +408,7 @@ public class Venta_Dao{
 
 	private static String obtenerNombreFichero() {
 		
-		File carpetaVentas = new File("C:\\Users\\vlagu\\Desktop\\2º DAM\\Proyecto\\Ventas");
+		File carpetaVentas = new File("C:\\Users\\Javie\\Proyecto_AD\\Proyecto\\Proyecto");
 		File[] listaFicheros = carpetaVentas.listFiles();
 		Calendar fechaActual = new GregorianCalendar();
 		String nombreFichero;
