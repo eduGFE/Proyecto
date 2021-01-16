@@ -8,7 +8,7 @@ public class Producto_Dto implements Serializable  {
 	private double pvp;
 	
 	
-	public Producto_Dto(String desclipcion, int stockanual, int pvp) {
+	public Producto_Dto(String desclipcion, int stockanual, double pvp) {
 		this.descripcion = desclipcion;
 		this.stockanual = stockanual;
 		this.pvp = pvp;
