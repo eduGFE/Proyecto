@@ -84,8 +84,11 @@ public class Coordinador_Ventas {
 		miLogicaVentas.exportarCSVporCliente(nifCliente, tipoConexion);
 	}
 
-	public ArrayList<Venta_Dto> mostrarVentasPorFecha(String fechaMin, String fechaMax, String tipoConexion) {
-		
+	public void exportarXMLporCliente(String nifCliente, String tipoConexion) {
+		miLogicaVentas.exportarXMLporCliente(nifCliente, tipoConexion);
+	}
+	
+	public ArrayList<Venta_Dto> mostrarVentasPorFecha(String fechaMin, String fechaMax, String tipoConexion) {		
 		return miLogicaVentas.mostrarVentasPorFecha(fechaMin, fechaMax, tipoConexion);
 	}
 

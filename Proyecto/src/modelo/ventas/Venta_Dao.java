@@ -13,10 +13,28 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.naming.spi.DirStateFactory.Result;
 import javax.swing.JOptionPane;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 import modelo.conexion.Conexion;
+import modelo.productos.Producto_Dto;
 
 //Clase que contendra las sentancias SQL necesarias para llevar la gestion de las ventas
 public class Venta_Dao{
@@ -203,20 +221,185 @@ public class Venta_Dao{
 
 	/*
 	public boolean exportarXMLporFechas(Date fechaMin, Date fechaMax, String tipoConexion) {					//PENDIENTE
-
-	}
-
-	public boolean exportarXMLporCliente(String nifCliente, String tipoConexion) {								//PENDIENTE
-		boolean seExporta=false;
-		Conexion conex = new Conexion(tipoConexion);
-		Calendar fechaActual = new GregorianCalendar();
-		String dia = Integer.toString(fechaActual.get(Calendar.DATE));
-		String mes = Integer.toString(fechaActual.get(Calendar.MONTH));
-		String ano = Integer.toString(fechaActual.get(Calendar.YEAR));
-
-		return seExporta;
+		//PEDIENTE
 	}
 	 */
+	public void exportarXMLporCliente(String nifCliente, String tipoConexion) { // PENDIENTE
+		Conexion conex = new Conexion(tipoConexion);
+		ArrayList<Venta_Dto> ListaVentas = new ArrayList<Venta_Dto>();
+
+		try {
+			String nombreFichero = obtenerNombreFicheroXML();
+			ListaVentas = AlmacenarEnArrayList(nifCliente, tipoConexion);
+			crearXML(nombreFichero, ListaVentas);
+		} catch (Exception e) {
+
+		}
+
+	}
+
+	public ArrayList<Venta_Dto> AlmacenarEnArrayList(String nifCliente, String tipoConexion) {
+		ArrayList<Venta_Dto> ListaVentas = new ArrayList<Venta_Dto>();
+		Venta_Dto venta_Dto = null;
+		Conexion conex = new Conexion(tipoConexion);
+		// fechaActual almacena la fecha actual del sistema
+		String nombreFichero = obtenerNombreFicheroXML();
+		if (nifCliente.isEmpty()) {
+			// Aqui va el codigo para clientes sin NIF
+			ResultSet clientes;
+			ResultSet ventas = null;
+			String consultaClientes = "SELECT id FROM CLIENTES WHERE nif = ''";
+			String consultaVentas = "SELECT * FROM ventas WHERE idcliente = ?";
+
+			try {
+				PreparedStatement sentenciaClientes = conex.getConexion().prepareStatement(consultaClientes);
+				clientes = sentenciaClientes.executeQuery();
+				while (clientes.next()) {
+					int idCliente = clientes.getInt("id");
+					PreparedStatement sentenciaVentas = conex.getConexion().prepareStatement(consultaVentas);
+					sentenciaVentas.setInt(1, idCliente);
+					ventas = sentenciaVentas.executeQuery();
+				}
+				if (ventas.next() == false) {
+					JOptionPane.showMessageDialog(null, "NO HAY CONTENIDO EN LA TABLA. NO SE IMPORTARÁ EL FICHERO");
+				} else {
+					ventas.previous();
+					File ficheroCSV = new File("Ventas XML Exportadas\\" + nombreFichero);
+					FileWriter flujoEscritura = new FileWriter(ficheroCSV);
+					BufferedWriter flujoEscrituraBuffer = new BufferedWriter(flujoEscritura);
+					while (ventas.next()) {
+						venta_Dto = new Venta_Dto(venta_Dto.getIdVenta(), venta_Dto.getFechaVenta(),
+								venta_Dto.getIdCliente(), venta_Dto.getIdProducto(), venta_Dto.getCantidad());
+						ListaVentas.add(venta_Dto);
+						System.out.println(venta_Dto.getIdVenta());
+						System.out.println("entra");
+
+					}
+					JOptionPane.showMessageDialog(null, "SE HAN EXPORTADO LOS DATOS DEL CLIENTE AL FICHERO XML");
+					flujoEscrituraBuffer.close();
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		} else {
+
+			String consultaVentas = "SELECT * FROM ventas WHERE idcliente = (SELECT id FROM clientes WHERE NIF = ?)";
+			ResultSet resultado = null;
+			try {
+				File ficheroCSV = new File("Ventas XML Exportadas\\" + nombreFichero);
+				PreparedStatement consultarVentasPorNif = conex.getConexion().prepareStatement(consultaVentas);
+				consultarVentasPorNif.setString(1, nifCliente);
+				// En resultado se almacena el resultset con todas las ventas del cliente
+				resultado = consultarVentasPorNif.executeQuery();
+				if (resultado.next() == false) {
+					JOptionPane.showMessageDialog(null, "NO HAY CONTENIDO EN LA TABLA. NO SE IMPORTARÁ EL FICHERO");
+				} else {
+					resultado.previous();
+					while (resultado.next()) {
+						venta_Dto = new Venta_Dto(resultado.getInt("idventa"), resultado.getDate("fechaventa"),
+								resultado.getInt("idcliente"), resultado.getInt("idproducto"),
+								resultado.getInt("cantidad"));
+						ListaVentas.add(venta_Dto);
+
+					}
+					JOptionPane.showMessageDialog(null, "SE HAN EXPORTADO LOS DATOS DEL CLIENTE AL FICHERO XML");
+
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return ListaVentas;
+
+	}
+
+	public static void crearXML(String nombrearchivo, ArrayList<Venta_Dto> ListaVentas) throws TransformerException {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		try {
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			DOMImplementation implementation = builder.getDOMImplementation();
+			Document document = implementation.createDocument(null, nombrearchivo, null);
+			document.setXmlVersion("1.0");
+			Element raiz = document.getDocumentElement();
+			for (int i = 0; i < ListaVentas.size(); i++) {
+				Element itemNode = document.createElement("ventas");
+				
+				Element Idnode = document.createElement("id_venta");
+				Text nodeIdvalue = document.createTextNode("" + ListaVentas.get(i).getIdVenta());
+				Idnode.appendChild(nodeIdvalue);
+
+				Element fechanode = document.createElement("fecha_venta");
+				Text nodefechavalue = document.createTextNode("" + ListaVentas.get(i).getFechaVenta());
+				fechanode.appendChild(nodefechavalue);
+				
+				
+				
+				
+				
+				
+				Element idclientenode = document.createElement("id_cliente");
+				Text nodeidclientevalue = document.createTextNode("" + ListaVentas.get(i).getIdCliente());
+				idclientenode.appendChild(nodeidclientevalue);
+				
+				Element idproductonode = document.createElement("id_producto");
+				Text nodeidproductovalue = document.createTextNode("" + ListaVentas.get(i).getIdProducto());
+				idproductonode.appendChild(nodeidproductovalue);
+				
+				Element cantidadnode = document.createElement("cantidad");
+				Text nodecantidadvalue = document.createTextNode("" + ListaVentas.get(i).getCantidad());
+				cantidadnode.appendChild(nodecantidadvalue);
+
+				itemNode.appendChild(Idnode);
+				itemNode.appendChild(fechanode);
+				itemNode.appendChild(idclientenode);
+				itemNode.appendChild(idproductonode);
+				itemNode.appendChild(cantidadnode);
+		
+				raiz.appendChild(itemNode);
+
+			}
+			Source source = new DOMSource(document);
+			StreamResult result = new StreamResult(new java.io.File(nombrearchivo + ".xml"));
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.transform(source, result);
+
+		} catch (ParserConfigurationException e) {
+			Logger.getLogger(Venta_Dao.class.getName()).log(Level.SEVERE, null, e);
+		}
+
+	}
+
+	private static String obtenerNombreFicheroXML() {
+
+		File carpetaVentas = new File("Ventas XML Exportadas");
+		carpetaVentas.mkdir(); // Crea la carpeta (en el WorkSpace del proyecto) si no existe.
+		String fechaActual = generarFechaActual();
+		int contadorDiario = 1;
+		String contadorDiarioStr = String.format("%02d", contadorDiario); // Formato de 2 dígitos.
+		String nombreFichero = "VENTAS" + fechaActual + "_" + contadorDiarioStr; // Provisional.
+
+		// COMPROBACIÓN DE EXISTENCIA DE NOMBRE DE FICHERO IGUAL.
+		// Recorremos el directorio guardando cada fichero en objeto ficheroEntrada.
+		for (File ficheroEntrada : carpetaVentas.listFiles()) {
+			// Si ya existe un fichero con el mismo nombre que el generado anteriormente...
+			if ((ficheroEntrada.getName().equals(nombreFichero))) {
+				contadorDiario++; // Aumentamos el contador diario.
+				if (contadorDiario < 10) { // Si es menor a 10...
+					// Fijamos formato en 2 dígitos y guardamos el nombre.
+					contadorDiarioStr = String.format("%02d", contadorDiario);
+					nombreFichero = "VENTAS" + fechaActual + "_" + contadorDiarioStr;
+				} else { // Si NO es menor a 10 no es necesario fijar formato.
+					nombreFichero = "VENTAS" + fechaActual + "_" + contadorDiario;
+				}
+			}
+		}
+		return nombreFichero;
+	}
 
 	public void exportarCSVporCliente(String nifCliente, String tipoConexion){
 
@@ -426,7 +609,7 @@ public class Venta_Dao{
 			resultSetClientes=muestraClientes.executeQuery(consultaMuestraClientes);
 			if(nifCliente.isBlank()){
 				while(resultSetClientes.next()&&existeNIF==false) {
-					
+
 					if((resultSetClientes.getString("nif")).equals("")) {
 						existeNIF=true;
 					}
@@ -447,29 +630,29 @@ public class Venta_Dao{
 	}
 
 	private static String obtenerNombreFichero() {
-		
+
 		File carpetaVentas = new File("Ventas CSV Exportadas");
 		carpetaVentas.mkdir();	//Crea la carpeta (en el WorkSpace del proyecto) si no existe.	
 		String fechaActual = generarFechaActual();
 		int contadorDiario = 1;
 		String contadorDiarioStr = String.format("%02d",contadorDiario); //Formato de 2 dígitos.
 		String nombreFichero = "VENTAS"+ fechaActual +"_"+contadorDiarioStr+".csv"; //Provisional.
-		
+
 		//COMPROBACIÓN DE EXISTENCIA DE NOMBRE DE FICHERO IGUAL.
 		//Recorremos el directorio guardando cada fichero en objeto ficheroEntrada.
 		for (File ficheroEntrada : carpetaVentas.listFiles()) {
-				//Si ya existe un fichero con el mismo nombre que el generado anteriormente...
-		        if ((ficheroEntrada.getName().equals(nombreFichero))) {
-		        	contadorDiario++; //Aumentamos el contador diario.
-		        	if (contadorDiario<10) { //Si es menor a 10...
-		        		//Fijamos formato en 2 dígitos y guardamos el nombre.
-		        		contadorDiarioStr = String.format("%02d",contadorDiario);
-		        		nombreFichero = "VENTAS"+ fechaActual +"_"+ contadorDiarioStr +".csv";
-		        	} else { //Si NO es menor a 10 no es necesario fijar formato.
-		        		nombreFichero = "VENTAS"+ fechaActual +"_"+ contadorDiario +".csv";
-		        	}	
-		        }	        
-		    }
+			//Si ya existe un fichero con el mismo nombre que el generado anteriormente...
+			if ((ficheroEntrada.getName().equals(nombreFichero))) {
+				contadorDiario++; //Aumentamos el contador diario.
+				if (contadorDiario<10) { //Si es menor a 10...
+					//Fijamos formato en 2 dígitos y guardamos el nombre.
+					contadorDiarioStr = String.format("%02d",contadorDiario);
+					nombreFichero = "VENTAS"+ fechaActual +"_"+ contadorDiarioStr +".csv";
+				} else { //Si NO es menor a 10 no es necesario fijar formato.
+					nombreFichero = "VENTAS"+ fechaActual +"_"+ contadorDiario +".csv";
+				}	
+			}	        
+		}
 		return nombreFichero;
 	}
 	

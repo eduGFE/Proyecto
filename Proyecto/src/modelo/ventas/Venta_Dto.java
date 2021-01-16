@@ -18,6 +18,14 @@ public class Venta_Dto {
         this.cantidad = 0;
     }
     
+    public Venta_Dto(int idVenta , Date fechaVenta, int idCliente,int idProducto,int cantidad){
+        this.idVenta = idVenta;
+        this.fechaVenta = fechaVenta;
+        this.idCliente = idCliente;
+        this.idProducto = idProducto;
+        this.cantidad = cantidad;
+    }
+    
     public int getIdVenta() {
         return idVenta;
     }

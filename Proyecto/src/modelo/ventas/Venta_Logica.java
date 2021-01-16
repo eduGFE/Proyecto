@@ -114,6 +114,27 @@ public class Venta_Logica {
 
 	}
 
+	public void exportarXMLporCliente(String nifCliente, String tipoConexion) {
+		boolean esDni;
+		String patronNif = "\\d{8}[A-Z a-z]{1}";
+
+		if(nifCliente.isEmpty()){
+			esDni = true;
+		}else if(!Pattern.matches(patronNif, nifCliente)) {
+			esDni= false;
+		}else{
+			esDni = true;
+		}
+
+		if(esDni) {
+			Venta_Dao venta = new Venta_Dao();
+			venta.exportarXMLporCliente(nifCliente, tipoConexion);
+		}else {
+			JOptionPane.showMessageDialog(null, "NO SE HAN PODIDO EXPORTAR LOS DATOS DEL CLIENTE AL FICHERO XML");
+		}
+
+	}
+
 	public ArrayList<Venta_Dto> mostrarVentasPorFecha(String fechaMin, String fechaMax, String tipoConexion) {
 		boolean esFechaValida = true;
 		boolean esOrdenCorrecto = true;

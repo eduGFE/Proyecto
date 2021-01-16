@@ -267,7 +267,11 @@ public class VentanaGestionVentas extends  JFrame {
 						//Aqui iria el codigo de XML por fecha
 					}else if(comboBoxExportarTipo.getSelectedIndex()==0 && comboBoxExportarFiltro.getSelectedIndex()==1) {
 						//Aqui iría el codigo de XML por cliente
-
+						String nifCliente;
+						nifCliente=JOptionPane.showInputDialog("Inserte el NIF del cliente cuya venta se quiere exportar");
+						coordinador_ventas.exportarXMLporCliente(nifCliente, tipoConexion);
+						
+						
 						//Si el combo box marca exportar a CSV y el otro combobox marca por fecha.
 					}else if(comboBoxExportarTipo.getSelectedIndex()==1 && comboBoxExportarFiltro.getSelectedIndex()==0) {
 						String fechaMin = JOptionPane.showInputDialog("Inserta la fecha de inicio de la busqueda en formato YYYY-MM-DD");
