@@ -139,8 +139,11 @@ public class Venta_Logica {
 	public void exportarXMLporFecha(String fechaMin, String fechaMax, String tipoConexion) {
 		boolean esFechaValida=true;
 		String formatoDePatronFecha = "\\d{4}-\\d{1,2}-\\d{1,2}";
-		
-		if(!Pattern.matches(formatoDePatronFecha, fechaMin)||!Pattern.matches(formatoDePatronFecha, fechaMax)) {
+		if (fechaMin!=null && fechaMax!=null){
+			if(!Pattern.matches(formatoDePatronFecha, fechaMin)||!Pattern.matches(formatoDePatronFecha, fechaMax)) {
+				esFechaValida = false;
+			}
+		}else{
 			esFechaValida = false;
 		}
 
@@ -158,7 +161,11 @@ public class Venta_Logica {
 		//Defino un patron para comprobar la cadena. \\d -> indica que es un digito y lo que hay en las llaves indica la cantidad de digitos a introducir.
 		String formatoDePatronFecha = "\\d{4}-\\d{1,2}-\\d{1,2}";
 		//COMPRUEBA EL FORMATO DE LA FECHA
-		if(!Pattern.matches(formatoDePatronFecha, fechaMin)||!Pattern.matches(formatoDePatronFecha, fechaMax)) {
+		if (fechaMin!=null && fechaMax!=null){
+			if(!Pattern.matches(formatoDePatronFecha, fechaMin)||!Pattern.matches(formatoDePatronFecha, fechaMax)) {
+				esFechaValida = false;
+			}
+		}else{
 			esFechaValida = false;
 		}
 		
@@ -177,7 +184,11 @@ public class Venta_Logica {
 		boolean esFechaValida=true;
 		String formatoDePatronFecha = "\\d{4}-\\d{1,2}-\\d{1,2}";
 		
-		if(!Pattern.matches(formatoDePatronFecha, fechaMin)||!Pattern.matches(formatoDePatronFecha, fechaMax)) {
+		if (fechaMin!=null && fechaMax!=null){
+			if(!Pattern.matches(formatoDePatronFecha, fechaMin)||!Pattern.matches(formatoDePatronFecha, fechaMax)) {
+				esFechaValida = false;
+			}
+		}else{
 			esFechaValida = false;
 		}
 

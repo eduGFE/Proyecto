@@ -101,20 +101,30 @@ public class Venta_Dao{
 	public boolean borrarVentaPorNIF(String nifCliente, String tipoConexion) {
 		boolean seBorra=false;
 		Conexion conex = new Conexion(tipoConexion);
+		ResultSet clientes;
+		
+		if(nifCliente.isBlank()) {
+			//Aqui va el codigo para clientes sin NIF
 
-		if(nifCliente.isEmpty()) {
-			
-			if(existeNIFCliente(nifCliente, tipoConexion)) {
-				
-				String sentenciaBorrarVentaNIF = "DELETE FROM ventas WHERE idcliente = (SELECT id FROM clientes WHERE NIF = '')";
-				try {
-					PreparedStatement borrarVentaNif=conex.getConexion().prepareStatement(sentenciaBorrarVentaNIF);
-					borrarVentaNif.executeUpdate();
-					seBorra=true;
-				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(null, "ERROR AL CONECTAR CON LA BASE DE DATOS");
+			String consultaClientes = "SELECT id FROM CLIENTES WHERE nif = ''";
+			String consultaVentas = "DELETE FROM ventas WHERE idcliente = ?";		
+			try {			
+				PreparedStatement sentenciaClientes = conex.getConexion().prepareStatement(consultaClientes);
+				clientes = sentenciaClientes.executeQuery();
+
+				while(clientes.next()) {
+					int idCliente = clientes.getInt("id");
+					PreparedStatement sentenciaVentas = conex.getConexion().prepareStatement(consultaVentas);
+					sentenciaVentas.setInt(1, idCliente);
+					if (sentenciaVentas.executeUpdate()==1) {
+						seBorra=true;
+					}
 				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "ERROR AL CONECTAR CON LA BASE DE DATOS");
+				e.printStackTrace();
 			}
+
 		}
 		else {
 			if(existeNIFCliente(nifCliente, tipoConexion)) {
@@ -140,39 +150,54 @@ public class Venta_Dao{
 	public ArrayList<Venta_Dto> mostrarVentasPorNIF(String nifCliente, String tipoConexion) {
 		ArrayList<Venta_Dto> listadoVentas = new ArrayList<Venta_Dto>();
 		Conexion conex = new Conexion(tipoConexion);
-		ResultSet resultado;
-		//Si la cadena entra vacía, se buscan null
-		if(nifCliente.isBlank()){
-			String consultaSQL = "SELECT * FROM ventas WHERE idcliente = (SELECT id FROM clientes WHERE NIF = '')";
-			try {
-				PreparedStatement consultaVentasPorNif = conex.getConexion().prepareStatement(consultaSQL);
-				resultado = consultaVentasPorNif.executeQuery();
-				while(resultado.next()){
-					Venta_Dto venta = new Venta_Dto();
-					venta.setIdVenta(resultado.getInt(1));
-					venta.setFechaVenta(resultado.getDate(2));
-					venta.setIdCliente(resultado.getInt(3));
-					venta.setIdProducto(resultado.getInt(4));
-					venta.setCantidad(resultado.getInt(5));
-					listadoVentas.add(venta);
-				}
+		ResultSet clientes;
+		ResultSet ventas=null;
+		
+		if(nifCliente.isBlank()) {
+			//Aqui va el codigo para clientes sin NIF
+
+			String consultaClientes = "SELECT id FROM CLIENTES WHERE nif = ''";
+			String consultaVentas = "SELECT * FROM ventas WHERE idcliente = ?";		
+			try {			
+				PreparedStatement sentenciaClientes = conex.getConexion().prepareStatement(consultaClientes);
+				clientes = sentenciaClientes.executeQuery();
+				while(clientes.next()) {
+					int idCliente = clientes.getInt("id");
+					PreparedStatement sentenciaVentas = conex.getConexion().prepareStatement(consultaVentas);
+					sentenciaVentas.setInt(1, idCliente);
+					ventas = sentenciaVentas.executeQuery();
+
+					if(ventas.next()) {
+						ventas.previous();
+
+						while(ventas.next()){
+							Venta_Dto venta = new Venta_Dto();
+							venta.setIdVenta(ventas.getInt(1));
+							venta.setFechaVenta(ventas.getDate(2));
+							venta.setIdCliente(ventas.getInt(3));
+							venta.setIdProducto(ventas.getInt(4));
+							venta.setCantidad(ventas.getInt(5));
+							listadoVentas.add(venta);
+						}
+					}
+				}			
 			} catch (SQLException e) {
-				e.printStackTrace();			
-				}
+				e.printStackTrace();
+			}
 			//Si no esta vacía
 		}else {
 			String consultaSQL = "SELECT * FROM ventas WHERE idcliente = (SELECT id FROM clientes WHERE NIF = ?)";
 			try {
 				PreparedStatement consultaVentasPorNif = conex.getConexion().prepareStatement(consultaSQL);
 				consultaVentasPorNif.setString(1, nifCliente);
-				resultado = consultaVentasPorNif.executeQuery();
-				while(resultado.next()){
+				ventas = consultaVentasPorNif.executeQuery();
+				while(ventas.next()){
 					Venta_Dto venta = new Venta_Dto();
-					venta.setIdVenta(resultado.getInt(1));
-					venta.setFechaVenta(resultado.getDate(2));
-					venta.setIdCliente(resultado.getInt(3));
-					venta.setIdProducto(resultado.getInt(4));
-					venta.setCantidad(resultado.getInt(5));
+					venta.setIdVenta(ventas.getInt(1));
+					venta.setFechaVenta(ventas.getDate(2));
+					venta.setIdCliente(ventas.getInt(3));
+					venta.setIdProducto(ventas.getInt(4));
+					venta.setCantidad(ventas.getInt(5));
 					listadoVentas.add(venta);
 				}
 			} catch (SQLException e) {
@@ -261,8 +286,7 @@ public class Venta_Dao{
 								ventas.getInt("cantidad"));
 						listaVentas.add(venta_Dto);
 					}
-				}
-					conex.desconectar();	
+				}	
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -282,12 +306,12 @@ public class Venta_Dao{
 								resultado.getInt("cantidad"));
 						listaVentas.add(venta_Dto);
 					}
-					conex.desconectar();
 
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
+		conex.desconectar();
 		return listaVentas;
 	}
 
@@ -379,11 +403,16 @@ public class Venta_Dao{
 			//Aqui va el codigo para clientes sin NIF
 			ResultSet clientes;
 			ResultSet ventas=null;
-
+			boolean hayContenido = false;
 			String consultaClientes = "SELECT id FROM CLIENTES WHERE nif = ''";
 			String consultaVentas = "SELECT * FROM ventas WHERE idcliente = ?";
-
+			
+			File ficheroCSV = new File("Ventas CSV Exportadas\\"+nombreFichero);
+			FileWriter flujoEscritura;
 			try {
+				flujoEscritura = new FileWriter(ficheroCSV);
+				BufferedWriter flujoEscrituraBuffer = new BufferedWriter(flujoEscritura);
+				
 				PreparedStatement sentenciaClientes = conex.getConexion().prepareStatement(consultaClientes);
 				clientes = sentenciaClientes.executeQuery();
 				while(clientes.next()) {
@@ -391,26 +420,27 @@ public class Venta_Dao{
 					PreparedStatement sentenciaVentas = conex.getConexion().prepareStatement(consultaVentas);
 					sentenciaVentas.setInt(1, idCliente);
 					ventas = sentenciaVentas.executeQuery();
-				}
-				if(ventas.next()==false) {
-					JOptionPane.showMessageDialog(null, "NO HAY CONTENIDO EN LA TABLA. NO SE IMPORTARÁ EL FICHERO");
-				}else {
-					ventas.previous();
-					File ficheroCSV = new File("Ventas CSV Exportadas\\"+nombreFichero);
-					FileWriter flujoEscritura = new FileWriter(ficheroCSV);
-					BufferedWriter flujoEscrituraBuffer = new BufferedWriter(flujoEscritura);
-					while(ventas.next()){
-						flujoEscrituraBuffer.write(ventas.getInt(1)+";");
-						flujoEscrituraBuffer.write(String.valueOf(ventas.getDate(2))+";");
-						flujoEscrituraBuffer.write(String.valueOf(ventas.getInt(3))+";");
-						flujoEscrituraBuffer.write(String.valueOf(ventas.getInt(4))+";");
-						flujoEscrituraBuffer.write(String.valueOf(ventas.getInt(5)));
-						flujoEscrituraBuffer.newLine();
+
+					if(ventas.next()) {
+						ventas.previous();
+						hayContenido=true;
+						while(ventas.next()){
+							flujoEscrituraBuffer.write(ventas.getInt(1)+";");
+							flujoEscrituraBuffer.write(String.valueOf(ventas.getDate(2))+";");
+							flujoEscrituraBuffer.write(String.valueOf(ventas.getInt(3))+";");
+							flujoEscrituraBuffer.write(String.valueOf(ventas.getInt(4))+";");
+							flujoEscrituraBuffer.write(String.valueOf(ventas.getInt(5)));
+							flujoEscrituraBuffer.newLine();
+						}
 					}
+				}
+				if (hayContenido) {
 					JOptionPane.showMessageDialog(null, "SE HAN EXPORTADO LOS DATOS DEL CLIENTE AL FICHERO CSV");
-					flujoEscrituraBuffer.close();
+				}else {
+					JOptionPane.showMessageDialog(null, "NO HAY CONTENIDO EN LA TABLA. NO SE IMPORTARÁ EL FICHERO");
 				}
 
+				flujoEscrituraBuffer.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -450,9 +480,7 @@ public class Venta_Dao{
 				e.printStackTrace();
 			}
 		}
-
 		conex.desconectar();
-
 	}
 
 	public void exportarCSVporFechas(String fechaMinima, String fechaMaxima, String tipoConexion) {					
@@ -491,9 +519,9 @@ public class Venta_Dao{
 				}
 				JOptionPane.showMessageDialog(null, "SE HAN EXPORTADO LOS DATOS DEL CLIENTE AL FICHERO CSV");
 				flujoEscrituraBuffer.close();
-				conex.desconectar();
+	
 			}
-
+			conex.desconectar();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
@@ -612,7 +640,6 @@ public class Venta_Dao{
 
 	private static Boolean existeNIFCliente(String nifCliente, String tipoConexion) {
 		boolean existeNIF=false;
-
 		Conexion conex = new Conexion(tipoConexion);
 		String consultaMuestraClientes= "SELECT nif FROM clientes";
 		try {

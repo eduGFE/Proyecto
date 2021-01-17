@@ -212,12 +212,12 @@ public class VentanaGestionVentas extends  JFrame {
 
 		JComboBox comboBoxEliminar = new JComboBox();
 		comboBoxEliminar.setModel(new DefaultComboBoxModel(new String[] {"Eliminar por ID.", "Eliminar por cliente."}));
-		comboBoxEliminar.setBounds(375, 196, 144, 23);
+		comboBoxEliminar.setBounds(367, 196, 144, 23);
 		getContentPane().add(comboBoxEliminar);
 
 		//BOTON ELIMINAR VENTAS
 		botonEliminarVentas = new JButton("Eliminar ventas");
-		botonEliminarVentas.setBounds(375, 230, 144, 23);
+		botonEliminarVentas.setBounds(367, 230, 144, 23);
 		botonEliminarVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -243,7 +243,7 @@ public class VentanaGestionVentas extends  JFrame {
 
 		JComboBox comboBoxExportarTipo = new JComboBox();
 		comboBoxExportarTipo.setModel(new DefaultComboBoxModel(new String[] {"Exportar XML", "Exportar CSV"}));
-		comboBoxExportarTipo.setBounds(554, 196, 121, 23);
+		comboBoxExportarTipo.setBounds(536, 196, 153, 23);
 		getContentPane().add(comboBoxExportarTipo);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -252,12 +252,12 @@ public class VentanaGestionVentas extends  JFrame {
 		JComboBox comboBoxExportarFiltro = new JComboBox();
 		comboBoxExportarFiltro.setModel(new DefaultComboBoxModel(new String[] {"Exportar por fechas", "Exportar por cliente"}));
 		comboBoxExportarFiltro.setToolTipText("");
-		comboBoxExportarFiltro.setBounds(554, 230, 121, 23);
+		comboBoxExportarFiltro.setBounds(536, 230, 153, 23);
 		getContentPane().add(comboBoxExportarFiltro);
 
 		//BOTON EXPORTAR
 		botonExportar = new JButton("Exportar datos");
-		botonExportar.setBounds(554, 264, 121, 23);
+		botonExportar.setBounds(555, 265, 121, 23);
 		botonExportar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -289,7 +289,6 @@ public class VentanaGestionVentas extends  JFrame {
 					}
 				}catch(Exception np) {
 					JOptionPane.showMessageDialog(null, "Operacion cancelada");
-					np.printStackTrace();
 				}
 			}
 		});
