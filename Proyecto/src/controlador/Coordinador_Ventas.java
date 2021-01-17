@@ -80,20 +80,25 @@ public class Coordinador_Ventas {
 		return miLogicaVentas.mostrarVentasPorNIF(nifCliente, tipoConexion);
 	}
 	
+	public ArrayList<Venta_Dto> mostrarVentasPorFecha(String fechaMin, String fechaMax, String tipoConexion) {		
+		return miLogicaVentas.mostrarVentasPorFecha(fechaMin, fechaMax, tipoConexion);
+	}
+	
 	public void exportarCSVporCliente(String nifCliente, String tipoConexion) {
 		miLogicaVentas.exportarCSVporCliente(nifCliente, tipoConexion);
 	}
 
+	public void exportarCSVporFecha(String fechaMin, String fechaMax, String tipoConexion) {
+		miLogicaVentas.exportarCSVporFecha(fechaMin, fechaMax, tipoConexion);		
+	}
+	
 	public void exportarXMLporCliente(String nifCliente, String tipoConexion) {
 		miLogicaVentas.exportarXMLporCliente(nifCliente, tipoConexion);
 	}
 	
-	public ArrayList<Venta_Dto> mostrarVentasPorFecha(String fechaMin, String fechaMax, String tipoConexion) {		
-		return miLogicaVentas.mostrarVentasPorFecha(fechaMin, fechaMax, tipoConexion);
-	}
-
-	public void exportarCSVporFecha(String fechaMin, String fechaMax, String tipoConexion) {
-		miLogicaVentas.exportarCSVporFecha(fechaMin, fechaMax, tipoConexion);		
+	
+	public void exportarXMLporFecha(String fechaMin, String fechaMax, String tipoConexion) {
+		miLogicaVentas.exportarXMLporFecha(fechaMin, fechaMax, tipoConexion);	
 	}
 	
 }

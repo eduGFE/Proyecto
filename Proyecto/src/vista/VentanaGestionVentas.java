@@ -261,23 +261,26 @@ public class VentanaGestionVentas extends  JFrame {
 		botonExportar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-
-
+					//XML POR FECHA
 					if(comboBoxExportarTipo.getSelectedIndex()==0 && comboBoxExportarFiltro.getSelectedIndex()==0) {
 						//Aqui iria el codigo de XML por fecha
+						String fechaMin = JOptionPane.showInputDialog("Inserta la fecha de inicio de la busqueda en formato YYYY-MM-DD");
+						String fechaMax = JOptionPane.showInputDialog("Inserta la fecha de fin de la busqueda en formato YYYY-MM-DD");
+						coordinador_ventas.exportarXMLporFecha(fechaMin, fechaMax, tipoConexion);
+						
+					//XLM POR CLIENTE	
 					}else if(comboBoxExportarTipo.getSelectedIndex()==0 && comboBoxExportarFiltro.getSelectedIndex()==1) {
 						//Aqui iría el codigo de XML por cliente
 						String nifCliente;
-						nifCliente=JOptionPane.showInputDialog("Inserte el NIF del cliente cuya venta se quiere exportar");
+						nifCliente=JOptionPane.showInputDialog("Inserte el NIF del cliente cuyas ventas se quieren exportar");
 						coordinador_ventas.exportarXMLporCliente(nifCliente, tipoConexion);
-						
-						
-						//Si el combo box marca exportar a CSV y el otro combobox marca por fecha.
+	
+						//Si el combo box marca exportar a CSV y el otro combobox marca por Fecha.
 					}else if(comboBoxExportarTipo.getSelectedIndex()==1 && comboBoxExportarFiltro.getSelectedIndex()==0) {
 						String fechaMin = JOptionPane.showInputDialog("Inserta la fecha de inicio de la busqueda en formato YYYY-MM-DD");
 						String fechaMax = JOptionPane.showInputDialog("Inserta la fecha de fin de la busqueda en formato YYYY-MM-DD");
 						coordinador_ventas.exportarCSVporFecha(fechaMin, fechaMax, tipoConexion);
-						//Si el combobox marca exportar a CSV y el otro comboBox marca por cliente
+						//Si el combobox marca exportar a CSV y el otro comboBox marca por Cliente
 					}else if(comboBoxExportarTipo.getSelectedIndex()==1 && comboBoxExportarFiltro.getSelectedIndex()==1) {
 						String nifCliente;
 						nifCliente=JOptionPane.showInputDialog("Inserte el NIF del cliente cuya venta se quiere eliminar");

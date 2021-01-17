@@ -219,38 +219,33 @@ public class Venta_Dao{
 		return listadoVentas;
 	}
 
-	/*
-	public boolean exportarXMLporFechas(Date fechaMin, Date fechaMax, String tipoConexion) {					//PENDIENTE
-		//PEDIENTE
-	}
-	 */
-	public void exportarXMLporCliente(String nifCliente, String tipoConexion) { // PENDIENTE
-		Conexion conex = new Conexion(tipoConexion);
-		ArrayList<Venta_Dto> ListaVentas = new ArrayList<Venta_Dto>();
-
-		try {
-			String nombreFichero = obtenerNombreFicheroXML();
-			ListaVentas = AlmacenarEnArrayList(nifCliente, tipoConexion);
-			crearXML(nombreFichero, ListaVentas);
+	public void exportarXMLporCliente(String nifCliente, String tipoConexion) {
+		ArrayList<Venta_Dto> listaVentas = new ArrayList<Venta_Dto>();
+		try {		
+			listaVentas = almacenarEnArrayList(nifCliente, tipoConexion);
+			if (listaVentas.size() != 0) {
+				String nombreFichero = obtenerNombreFicheroXML();
+				crearXML(nombreFichero, listaVentas);	
+			}else {
+				JOptionPane.showMessageDialog(null, "No hay Ventas con el Nif de Cliente especificado!");
+			}
+			
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
-
 	}
 
-	public ArrayList<Venta_Dto> AlmacenarEnArrayList(String nifCliente, String tipoConexion) {
-		ArrayList<Venta_Dto> ListaVentas = new ArrayList<Venta_Dto>();
+	public ArrayList<Venta_Dto> almacenarEnArrayList(String nifCliente, String tipoConexion) {
+		ArrayList<Venta_Dto> listaVentas = new ArrayList<Venta_Dto>();
 		Venta_Dto venta_Dto = null;
 		Conexion conex = new Conexion(tipoConexion);
-		// fechaActual almacena la fecha actual del sistema
-		String nombreFichero = obtenerNombreFicheroXML();
+
 		if (nifCliente.isEmpty()) {
 			// Aqui va el codigo para clientes sin NIF
 			ResultSet clientes;
 			ResultSet ventas = null;
 			String consultaClientes = "SELECT id FROM CLIENTES WHERE nif = ''";
 			String consultaVentas = "SELECT * FROM ventas WHERE idcliente = ?";
-
 			try {
 				PreparedStatement sentenciaClientes = conex.getConexion().prepareStatement(consultaClientes);
 				clientes = sentenciaClientes.executeQuery();
@@ -259,29 +254,16 @@ public class Venta_Dao{
 					PreparedStatement sentenciaVentas = conex.getConexion().prepareStatement(consultaVentas);
 					sentenciaVentas.setInt(1, idCliente);
 					ventas = sentenciaVentas.executeQuery();
-				}
-				if (ventas.next() == false) {
-					JOptionPane.showMessageDialog(null, "NO HAY CONTENIDO EN LA TABLA. NO SE IMPORTARÁ EL FICHERO");
-				} else {
-					ventas.previous();
-					File ficheroCSV = new File("Ventas XML Exportadas\\" + nombreFichero);
-					FileWriter flujoEscritura = new FileWriter(ficheroCSV);
-					BufferedWriter flujoEscrituraBuffer = new BufferedWriter(flujoEscritura);
+				
 					while (ventas.next()) {
-						venta_Dto = new Venta_Dto(venta_Dto.getIdVenta(), venta_Dto.getFechaVenta(),
-								venta_Dto.getIdCliente(), venta_Dto.getIdProducto(), venta_Dto.getCantidad());
-						ListaVentas.add(venta_Dto);
-						System.out.println(venta_Dto.getIdVenta());
-						System.out.println("entra");
-
+						venta_Dto = new Venta_Dto(ventas.getInt("idventa"), ventas.getDate("fechaventa"),
+								ventas.getInt("idcliente"), ventas.getInt("idproducto"),
+								ventas.getInt("cantidad"));
+						listaVentas.add(venta_Dto);
 					}
-					JOptionPane.showMessageDialog(null, "SE HAN EXPORTADO LOS DATOS DEL CLIENTE AL FICHERO XML");
-					flujoEscrituraBuffer.close();
 				}
-
+					conex.desconectar();	
 			} catch (SQLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
@@ -290,68 +272,54 @@ public class Venta_Dao{
 			String consultaVentas = "SELECT * FROM ventas WHERE idcliente = (SELECT id FROM clientes WHERE NIF = ?)";
 			ResultSet resultado = null;
 			try {
-				File ficheroCSV = new File("Ventas XML Exportadas\\" + nombreFichero);
 				PreparedStatement consultarVentasPorNif = conex.getConexion().prepareStatement(consultaVentas);
 				consultarVentasPorNif.setString(1, nifCliente);
 				// En resultado se almacena el resultset con todas las ventas del cliente
 				resultado = consultarVentasPorNif.executeQuery();
-				if (resultado.next() == false) {
-					JOptionPane.showMessageDialog(null, "NO HAY CONTENIDO EN LA TABLA. NO SE IMPORTARÁ EL FICHERO");
-				} else {
-					resultado.previous();
 					while (resultado.next()) {
 						venta_Dto = new Venta_Dto(resultado.getInt("idventa"), resultado.getDate("fechaventa"),
 								resultado.getInt("idcliente"), resultado.getInt("idproducto"),
 								resultado.getInt("cantidad"));
-						ListaVentas.add(venta_Dto);
-
+						listaVentas.add(venta_Dto);
 					}
-					JOptionPane.showMessageDialog(null, "SE HAN EXPORTADO LOS DATOS DEL CLIENTE AL FICHERO XML");
-
-				}
+					conex.desconectar();
 
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		return ListaVentas;
-
+		return listaVentas;
 	}
 
-	public static void crearXML(String nombrearchivo, ArrayList<Venta_Dto> ListaVentas) throws TransformerException {
+	public static void crearXML(String nombreArchivo, ArrayList<Venta_Dto> listaVentas) throws TransformerException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			DOMImplementation implementation = builder.getDOMImplementation();
-			Document document = implementation.createDocument(null, nombrearchivo, null);
+			Document document = implementation.createDocument(null, nombreArchivo, null);
 			document.setXmlVersion("1.0");
 			Element raiz = document.getDocumentElement();
-			for (int i = 0; i < ListaVentas.size(); i++) {
+			for (int i = 0; i < listaVentas.size(); i++) {
 				Element itemNode = document.createElement("ventas");
 				
 				Element Idnode = document.createElement("id_venta");
-				Text nodeIdvalue = document.createTextNode("" + ListaVentas.get(i).getIdVenta());
+				Text nodeIdvalue = document.createTextNode("" + listaVentas.get(i).getIdVenta());
 				Idnode.appendChild(nodeIdvalue);
 
 				Element fechanode = document.createElement("fecha_venta");
-				Text nodefechavalue = document.createTextNode("" + ListaVentas.get(i).getFechaVenta());
+				Text nodefechavalue = document.createTextNode("" + listaVentas.get(i).getFechaVenta());
 				fechanode.appendChild(nodefechavalue);
-				
-				
-				
-				
-				
-				
+		
 				Element idclientenode = document.createElement("id_cliente");
-				Text nodeidclientevalue = document.createTextNode("" + ListaVentas.get(i).getIdCliente());
+				Text nodeidclientevalue = document.createTextNode("" + listaVentas.get(i).getIdCliente());
 				idclientenode.appendChild(nodeidclientevalue);
 				
 				Element idproductonode = document.createElement("id_producto");
-				Text nodeidproductovalue = document.createTextNode("" + ListaVentas.get(i).getIdProducto());
+				Text nodeidproductovalue = document.createTextNode("" + listaVentas.get(i).getIdProducto());
 				idproductonode.appendChild(nodeidproductovalue);
 				
 				Element cantidadnode = document.createElement("cantidad");
-				Text nodecantidadvalue = document.createTextNode("" + ListaVentas.get(i).getCantidad());
+				Text nodecantidadvalue = document.createTextNode("" + listaVentas.get(i).getCantidad());
 				cantidadnode.appendChild(nodecantidadvalue);
 
 				itemNode.appendChild(Idnode);
@@ -364,9 +332,10 @@ public class Venta_Dao{
 
 			}
 			Source source = new DOMSource(document);
-			StreamResult result = new StreamResult(new java.io.File(nombrearchivo + ".xml"));
+			StreamResult result = new StreamResult(new File("Ventas XML Exportadas\\" +nombreArchivo));
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.transform(source, result);
+			JOptionPane.showMessageDialog(null, "SE HAN EXPORTADO LOS DATOS AL FICHERO -> "+nombreArchivo);
 
 		} catch (ParserConfigurationException e) {
 			Logger.getLogger(Venta_Dao.class.getName()).log(Level.SEVERE, null, e);
@@ -381,7 +350,7 @@ public class Venta_Dao{
 		String fechaActual = generarFechaActual();
 		int contadorDiario = 1;
 		String contadorDiarioStr = String.format("%02d", contadorDiario); // Formato de 2 dígitos.
-		String nombreFichero = "VENTAS" + fechaActual + "_" + contadorDiarioStr; // Provisional.
+		String nombreFichero = "VENTAS" + fechaActual + "_" + contadorDiarioStr+".xml"; // Provisional.
 
 		// COMPROBACIÓN DE EXISTENCIA DE NOMBRE DE FICHERO IGUAL.
 		// Recorremos el directorio guardando cada fichero en objeto ficheroEntrada.
@@ -392,9 +361,9 @@ public class Venta_Dao{
 				if (contadorDiario < 10) { // Si es menor a 10...
 					// Fijamos formato en 2 dígitos y guardamos el nombre.
 					contadorDiarioStr = String.format("%02d", contadorDiario);
-					nombreFichero = "VENTAS" + fechaActual + "_" + contadorDiarioStr;
+					nombreFichero = "VENTAS" + fechaActual + "_" + contadorDiarioStr+".xml";
 				} else { // Si NO es menor a 10 no es necesario fijar formato.
-					nombreFichero = "VENTAS" + fechaActual + "_" + contadorDiario;
+					nombreFichero = "VENTAS" + fechaActual + "_" + contadorDiario+".xml";
 				}
 			}
 		}
@@ -405,7 +374,7 @@ public class Venta_Dao{
 
 		Conexion conex = new Conexion(tipoConexion);
 		//fechaActual almacena la fecha actual del sistema
-		String nombreFichero = obtenerNombreFichero();
+		String nombreFichero = obtenerNombreFicheroCSV();
 		if(nifCliente.isBlank()) {
 			//Aqui va el codigo para clientes sin NIF
 			ResultSet clientes;
@@ -491,7 +460,7 @@ public class Venta_Dao{
 		SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
 		ResultSet resultado=null;
 		String muestraVentasPorFecha = "SELECT * FROM ventas WHERE fechaventa BETWEEN ? AND ?";
-		String nombreFichero = obtenerNombreFichero();
+		String nombreFichero = obtenerNombreFicheroCSV();
 		try {
 			PreparedStatement consultarVentasPorFecha = conex.getConexion().prepareStatement(muestraVentasPorFecha);
 			java.util.Date fechaMinimaUtil = formatoFecha.parse(fechaMinima);
@@ -530,6 +499,49 @@ public class Venta_Dao{
 		} catch (ParseException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void exportarXMLporFechas(String fechaMinima, String fechaMaxima, String tipoConexion) {					
+		Conexion conex = new Conexion(tipoConexion);
+		SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+		ResultSet resultado=null;
+		String muestraVentasPorFecha = "SELECT * FROM ventas WHERE fechaventa BETWEEN ? AND ?";
+		try {
+			PreparedStatement consultarVentasPorFecha = conex.getConexion().prepareStatement(muestraVentasPorFecha);
+			java.util.Date fechaMinimaUtil = formatoFecha.parse(fechaMinima);
+			java.sql.Date fechaMinimaSQL = new java.sql.Date(fechaMinimaUtil.getTime());
+
+			java.util.Date fechaMaximaUtil = formatoFecha.parse(fechaMaxima);
+			java.sql.Date fechaMaximaSQL = new java.sql.Date(fechaMaximaUtil.getTime());
+
+			consultarVentasPorFecha.setDate(1, fechaMinimaSQL);
+			consultarVentasPorFecha.setDate(2, fechaMaximaSQL);
+			resultado = consultarVentasPorFecha.executeQuery();
+			
+			ArrayList<Venta_Dto> listaVentas = new ArrayList<Venta_Dto>();
+			Venta_Dto venta_Dto = null;
+			
+			while (resultado.next()) {
+				venta_Dto = new Venta_Dto(resultado.getInt("idventa"), resultado.getDate("fechaventa"),
+						resultado.getInt("idcliente"), resultado.getInt("idproducto"),
+						resultado.getInt("cantidad"));
+				listaVentas.add(venta_Dto);
+			}
+			conex.desconectar();
+			
+			if (listaVentas.size() != 0) {
+				String nombreFichero = obtenerNombreFicheroXML();
+				crearXML(nombreFichero, listaVentas);
+			}else {
+				JOptionPane.showMessageDialog(null, "No hay Ventas en el periodo seleccionado!");
+			}		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (TransformerException e) {
 			e.printStackTrace();
 		}
 	}
@@ -621,7 +633,6 @@ public class Venta_Dao{
 					}
 				}
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -629,7 +640,7 @@ public class Venta_Dao{
 		return existeNIF;
 	}
 
-	private static String obtenerNombreFichero() {
+	private static String obtenerNombreFicheroCSV() {
 
 		File carpetaVentas = new File("Ventas CSV Exportadas");
 		carpetaVentas.mkdir();	//Crea la carpeta (en el WorkSpace del proyecto) si no existe.	

@@ -115,26 +115,43 @@ public class Venta_Logica {
 	}
 
 	public void exportarXMLporCliente(String nifCliente, String tipoConexion) {
-		boolean esDni;
-		String patronNif = "\\d{8}[A-Z a-z]{1}";
-
+		boolean esFormatoNif;
+		String patronDni = "\\d{8}[A-Z a-z]{1}";
+		String patronNie = "[A-Z|a-z]{1}\\d{7}[A-Z|a-z]{1}";
+		
+		//Comprobamos formato NIF
 		if(nifCliente.isEmpty()){
-			esDni = true;
-		}else if(!Pattern.matches(patronNif, nifCliente)) {
-			esDni= false;
+			esFormatoNif = true;
+		}else if(!Pattern.matches(patronDni, nifCliente) && !Pattern.matches(patronNie, nifCliente)) {
+			esFormatoNif= false;
 		}else{
-			esDni = true;
+			esFormatoNif = true;
 		}
 
-		if(esDni) {
+		if(esFormatoNif) {
 			Venta_Dao venta = new Venta_Dao();
 			venta.exportarXMLporCliente(nifCliente, tipoConexion);
 		}else {
-			JOptionPane.showMessageDialog(null, "NO SE HAN PODIDO EXPORTAR LOS DATOS DEL CLIENTE AL FICHERO XML");
+			JOptionPane.showMessageDialog(null, "El formato de NIF no es correcto!");
+		}
+	}
+	
+	public void exportarXMLporFecha(String fechaMin, String fechaMax, String tipoConexion) {
+		boolean esFechaValida=true;
+		String formatoDePatronFecha = "\\d{4}-\\d{1,2}-\\d{1,2}";
+		
+		if(!Pattern.matches(formatoDePatronFecha, fechaMin)||!Pattern.matches(formatoDePatronFecha, fechaMax)) {
+			esFechaValida = false;
 		}
 
+		if(esFechaValida == false) {
+			JOptionPane.showMessageDialog(null, "El formato de la fecha debe ser: YYYY-MM-DD");
+		}else{
+			Venta_Dao venta = new Venta_Dao();
+			venta.exportarXMLporFechas(fechaMin, fechaMax, tipoConexion);
+		}
 	}
-
+	
 	public ArrayList<Venta_Dto> mostrarVentasPorFecha(String fechaMin, String fechaMax, String tipoConexion) {
 		boolean esFechaValida = true;
 		boolean esOrdenCorrecto = true;
@@ -144,8 +161,6 @@ public class Venta_Logica {
 		if(!Pattern.matches(formatoDePatronFecha, fechaMin)||!Pattern.matches(formatoDePatronFecha, fechaMax)) {
 			esFechaValida = false;
 		}
-		
-		
 		
 		if(esFechaValida == false){
 			JOptionPane.showMessageDialog(null, "La fecha introducida es incorrecta");
