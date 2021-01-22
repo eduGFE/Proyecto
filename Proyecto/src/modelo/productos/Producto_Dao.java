@@ -39,7 +39,7 @@ public class Producto_Dao {
 		boolean existe =false;
 		if (fila != -1) {
 			nombrearchivo = table2.getModel().getValueAt(fila, 0).toString();
-			File fichero = new File("Productos\\" + nombrearchivo);
+			File fichero = new File("Archivos Productos para Importar\\" + nombrearchivo);
 			ObjectInputStream dataIS = null;
 			try {
 				dataIS = new ObjectInputStream(new FileInputStream(fichero));

@@ -283,7 +283,7 @@ public class VentanaGestionVentas extends  JFrame {
 						//Si el combobox marca exportar a CSV y el otro comboBox marca por Cliente
 					}else if(comboBoxExportarTipo.getSelectedIndex()==1 && comboBoxExportarFiltro.getSelectedIndex()==1) {
 						String nifCliente;
-						nifCliente=JOptionPane.showInputDialog("Inserte el NIF del cliente cuya venta se quiere eliminar");
+						nifCliente=JOptionPane.showInputDialog("Inserte el NIF del cliente cuyas ventas se quiere exportar");
 						coordinador_ventas.exportarCSVporCliente(nifCliente, tipoConexion);
 
 					}
