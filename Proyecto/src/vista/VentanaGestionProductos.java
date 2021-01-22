@@ -220,7 +220,7 @@ public class VentanaGestionProductos extends JFrame implements Runnable {
 
 //Hilo que muestra la informacion del directio Productos nada mas se muestra la ventana
 	public void run() {
-		File directorio = new File("Productos");
+		File directorio = new File("Archivos Productos para Importar");
 		String[] lista = directorio.list();
 		Object[] file = null;
 		model2.setRowCount(0);
