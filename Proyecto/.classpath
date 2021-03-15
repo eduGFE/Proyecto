@@ -6,7 +6,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/mhl_1/OneDrive/Escritorio/ACCESO A DATOS/UT2 - MANEJO DE CONECTORES/conectoresJDBC (Ya en Eclipse)/conectoresSQL/mysql-connector-java-5.1.38-bin.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mhl_1/OneDrive/Escritorio/ACCESO A DATOS/UT2 - MANEJO DE CONECTORES/conectoresJDBC (Ya en Eclipse)/conectoresSQL/sqlite-jdbc-3.8.11.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mhl_1/eclipse/java-2020-09/eclipse/ECLIPSE WorkSpace/CONECTORES - JDBC/conectoresSQL/mysql-connector-java-5.1.38-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mhl_1/eclipse/java-2020-09/eclipse/ECLIPSE WorkSpace/CONECTORES - JDBC/conectoresSQL/sqlite-jdbc-3.8.11.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
