@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * Realizar un programa, separado de la aplicación principal, con GUI de consola que sea
  * capaz de leer productos por teclado y generar archivo binario con los productos añadidos por
  * teclado. El nombre del archivo binario deberá tener el siguiente formato:
- * CLIENTESddmmaa_contadorDiario.bin, el contador diario empezará siendo 01 e
+ * CLIENTESddmmaa_contadorDiario.bin, el contador diario empezará siendo 01 e irá
  * incrementándose en función de los archivos anteriores contenidos en el directorio.
  * @author Miguel Herrero López 
  */
